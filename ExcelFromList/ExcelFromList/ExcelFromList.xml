@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExcelFromList</name>
+    </assembly>
+    <members>
+        <member name="T:ExcelFromList.ExcelWorkBook">
+            <summary>
+            Creates a new instance of the ExcelWorkBook.
+            </summary>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.SaveAs(System.String)">
+            <summary>
+            Saves the workbook to an Excel file.
+            </summary>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.Open">
+            <summary>
+            Opens saved Excel file with OS default program.
+            </summary>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.GetBytesArray">
+            <summary>
+            Returns the byte array from ExcelWorkBook.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.AddSheet``1(System.String,System.Collections.Generic.List{``0})">
+            <summary>
+            Adds a sheet to the worksheet, will apply default style config
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="sheetName"></param>
+            <param name="classList"></param>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.AddSheet``1(System.String,System.Collections.Generic.List{``0},ExcelFromList.ExcelStyleConfig)">
+            <summary>
+            Adds a sheet to the worksheet, will apply provided style config
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="sheetName"></param>
+            <param name="classList"></param>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.RemoveSheet(System.String)">
+            <summary>
+            Removes a sheet from the worksheet
+            </summary>
+            <param name="sheetName"></param>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.ClearWorkSheet">
+            <summary>
+            Removes all sheets from worksheet
+            </summary>
+        </member>
+        <member name="M:ExcelFromList.ExcelWorkBook.SheetExists(System.String)">
+            <summary>
+            Checks if a specific sheet exists
+            </summary>
+            <param name="sheetName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:ExcelFromList.ExcelStyleConfig">
+            <summary>
+            Creates a new instance of ExcelStyleConfig. Use this to add styles, title and subtitles.
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.ShowHeaders">
+            <summary>
+            Enable to show headers (taken from the property name), defaults to true
+            <para>Camel case property names will be split on each capital letter with a space</para>
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.ShowGridLines">
+            <summary>
+            Enable to show grid lines, defaults to true
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.AutoFitColumns">
+            <summary>
+            Enable to match the width of the column to the data length, defaults to true
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.FreezePanes">
+            <summary>
+            Enable to freeze the first row, defaults to true
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.DateFormat">
+            <summary>
+            Gets or sets custom Excel format string, defaults to m/d/yyyy
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.DecimalFormat">
+            <summary>
+            Gets or sets custom Excel format string, defaults to #,##0.00_);[Red]-#,##0.00
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.DoubleFormat">
+            <summary>
+            Gets or sets custom Excel format string, defaults to #,##0.00_);[Red]-#,##0.00
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.IntFormat">
+            <summary>
+            Gets or sets custom Excel format string, defaults to #,##0_);[Red]-#,##0
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.Border">
+            <summary>
+            Enable to draw a border around each data cell, defaults to false
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.BorderAround">
+            <summary>
+            Enable to draw a border around the data range, defaults to false
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.BorderColor">
+            <summary>
+            Gets or sets the border color around each data cell, defaults to Black
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.BorderAroundColor">
+            <summary>
+            Gets or sets the border color around the data range, defaults to Black
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.BorderStyle">
+            <summary>
+            Gets or sets the border style around each data cell, defaults to Thin
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.BorderAroundStyle">
+            <summary>
+            Gets or sets the border style around the data range, defaults to Thin
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderFontColor">
+            <summary>
+            Gets or sets the header font color, defaults to LightGray
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBackgroundColor">
+            <summary>
+            Gets or sets the header background color, defaults to DarkSlateGray
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorder">
+            <summary>
+            Enable to draw a border around each header cell, defaults to false
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorderAround">
+            <summary>
+            Enable to draw a border around the header range, defaults to false
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorderColor">
+            <summary>
+            Gets or sets the border color around each header cell, defaults to Black
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorderAroundColor">
+            <summary>
+            Gets or sets the border color around the header range, defaults to Black
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorderStyle">
+            <summary>
+            Gets or sets the border style around each header cell, defaults to Thin
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.HeaderBorderAroundStyle">
+            <summary>
+            Gets or sets the border style around the header range, defaults to Thin
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.PaddingColumns">
+            <summary>
+            Gets or sets the number of columns to insert before column A, defaults to 0
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.PaddingRows">
+            <summary>
+            Gets or sets the number of rows to insert before row 1, defaults to 0
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.Title">
+            <summary>
+            Gets or sets the title of the sheet, defaults to null
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.Subtitles">
+            <summary>
+            Gets or sets the subtitles of the sheet, defaults to empty string array
+            </summary>
+        </member>
+        <member name="P:ExcelFromList.ExcelStyleConfig.Base64Image">
+            <summary>
+            Gets or sets a base64 image to be placed on the sheet, defaults to null
+            </summary>
+        </member>
+    </members>
+</doc>
