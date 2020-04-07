@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
   <metadata>
-    
+
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <id>ExcelFromList</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <title>ExcelFromList</title>
     <description>Easily create stylized excel workbooks from lists. Uses EPPlus internally.</description>
-    <releaseNotes>Initial 1.0.0 release</releaseNotes>
+    <releaseNotes>Improved exception handling, title/subtitles adjustments</releaseNotes>
     <authors>Raul Marquez</authors>
     <copyright>Copyright 2020 Raul Marquez</copyright>
     <!--<license type="file">License.txt</license>-->
     <license type="expression">GPL-3.0-only</license>
-    <!--<projectUrl>https://www.website.com/project</projectUrl>-->
+    <projectUrl>https://github.com/RaulMarquezInclan/ExcelFromList</projectUrl>
     <!--<icon>images\icon.png</icon>-->
     <owners>Raul Marquez</owners>
     <tags>excel list listtoexcel</tags>
-    
+
     <dependencies>
       <group targetFramework="net461">
         <dependency id="EPPlus" version="5.0.4" />
         <dependency id="System.Drawing.Common" version="4.7.0" />
-    </group>
-    </dependencies>   
-    
+      </group>
+    </dependencies>
+
   </metadata>
 
   <files>
