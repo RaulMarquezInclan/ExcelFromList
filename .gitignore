@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/ExcelFromList/.vs/ExcelFromList/v15
+/ExcelFromList/Testing/obj
+/ExcelFromList/Testing/bin/Debug
+/ExcelFromList/packages
+/ExcelFromList/ExcelFromList/obj
+/ExcelFromList/ExcelFromList/bin/Debug/netstandard2.0
