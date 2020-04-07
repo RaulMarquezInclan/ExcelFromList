@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace ExcelFromList
@@ -119,6 +120,23 @@ namespace ExcelFromList
             }
 
             return destImage;
+        }
+
+        public static string SplitCamelCase(string input)
+        {
+            var result = string.Empty;
+            if (input != null)
+            {
+                try
+                {
+                    result = Regex.Replace(input, "([A-Z])", " $1", RegexOptions.Compiled).Trim();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            return result;
         }
 
     }

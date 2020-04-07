@@ -192,22 +192,18 @@ namespace Testing
                 FOPDigLabeled = "18 (24)"
             }
         };
-
-        static string defaultStylesFile = "C:\\DefaultStyles.xlsx";
-        static string withTitleAndSubtitlesFile = "C:\\WithTitleAndSubtitles.xlsx";
-        static string withTitleAndSubtitlesAndImageFile = "C:\\WithTitleAndSubtitlesAndImage.xlsx";
-        static string withTitleAndSubtitlesAndImageAndTwoSheetsFile = "C:\\WithTitleAndSubtitlesAndImageAndTwoSheets.xlsx";
+        static string outputFileName = "C:\\OutputFile.xlsx";
 
         static void Main(string[] args)
         {
 
             //DefaultStyles();
 
-            //WithTitleAndSubtitles();
+            WithTitleAndSubtitles();
 
             //WithTitleAndSubtitlesAndImage();
 
-            WithTitleAndSubtitlesAndImageAndTwoSheets();
+            //WithTitleAndSubtitlesAndImageAndTwoSheets();
 
         }
 
@@ -215,7 +211,7 @@ namespace Testing
         {
             var wb = new ExcelWorkBook();
             wb.AddSheet("Shelf Life", shelfLifeData);
-            wb.SaveAs(defaultStylesFile);
+            wb.SaveAs(outputFileName);
             wb.Open();
         }
 
@@ -234,7 +230,7 @@ namespace Testing
             };
 
             wb.AddSheet("Shelf Life", shelfLifeData, style);
-            wb.SaveAs(withTitleAndSubtitlesFile);
+            wb.SaveAs(outputFileName);
             wb.Open();
         }
 
@@ -254,7 +250,7 @@ namespace Testing
             };
 
             wb.AddSheet("Shelf Life", shelfLifeData, style);
-            wb.SaveAs(withTitleAndSubtitlesAndImageFile);
+            wb.SaveAs(outputFileName);
             wb.Open();
         }
 
@@ -286,12 +282,12 @@ namespace Testing
                 Border = true,
                 BorderColor = Color.CadetBlue,
                 HeaderBackgroundColor = Color.Yellow,
-                HeaderFontColor = Color.Black                
+                HeaderFontColor = Color.Black
             };
 
             wb.AddSheet("Shelf Life", shelfLifeData, sheetOneStyle);
             wb.AddSheet("Food Nutrients", foodInfoData, sheetTwoStyle);
-            wb.SaveAs(withTitleAndSubtitlesAndImageAndTwoSheetsFile);
+            wb.SaveAs(outputFileName);
             wb.Open();
         }
 

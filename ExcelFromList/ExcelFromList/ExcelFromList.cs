@@ -40,52 +40,6 @@ namespace ExcelFromList
 
         #region Public Methods
         /// <summary>
-        /// Saves the workbook to an Excel file.
-        /// </summary>
-        public void SaveAs(string _fullFileName)
-        {
-            fullFileName = _fullFileName;
-            try
-            {
-                bytesArray = GetBytesArray();
-
-                if (File.Exists(fullFileName))
-                {
-                    File.Delete(fullFileName);
-                }
-                Utils.WaitForFileReady(fullFileName);
-
-                using (var file = File.OpenWrite(fullFileName))
-                {
-                    file.Write(bytesArray, 0, bytesArray.Length);
-                }
-                Utils.WaitForFileReady(fullFileName);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Opens saved Excel file with OS default program.
-        /// </summary>
-        public void Open()
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(fullFileName))
-                {
-                    Process.Start(fullFileName);
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
         /// Returns the byte array from ExcelWorkBook.
         /// </summary>
         /// <returns></returns>
@@ -124,7 +78,7 @@ namespace ExcelFromList
                                     if (rowCtrl == 2)
                                     {
                                         ExcelRange headerCell = ws.Cells[columnLetters[columnCounter] + (rowCtrl - 1)];
-                                        headerCell.Value = SplitCamelCase(colData.Name);
+                                        headerCell.Value = Utils.SplitCamelCase(colData.Name);
                                         headerCell = FormatHeaderCell(headerCell, colIndex, sheet.Columns.Count, sheet);
                                     }
                                 }
@@ -155,9 +109,14 @@ namespace ExcelFromList
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                var st = new StackTrace();
+                var caller = st.GetFrame(1).GetMethod();
+                if (caller.Name == "SaveAs" && caller.DeclaringType.FullName == GetType().FullName)
+                    throw;
+                else
+                    throw ex;
             }
 
             return bytesArray;
@@ -177,7 +136,7 @@ namespace ExcelFromList
             }
             if (list == null)
             {
-                throw new Exception("List of data cannot be null");
+                throw new Exception("Data list cannot be null");
             }
 
             try
@@ -189,9 +148,9 @@ namespace ExcelFromList
                     Data = list.Cast<object>().ToList()
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -209,7 +168,7 @@ namespace ExcelFromList
             }
             if (list == null)
             {
-                throw new Exception("List of data cannot be null");
+                throw new Exception("Data list cannot be null");
             }
             if (esc == null)
             {
@@ -225,9 +184,9 @@ namespace ExcelFromList
                     Data = list.Cast<object>().ToList()
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -250,9 +209,9 @@ namespace ExcelFromList
                     Sheets.Remove(sheetToRemove);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -265,9 +224,9 @@ namespace ExcelFromList
             {
                 Sheets = new List<Sheet>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -287,13 +246,63 @@ namespace ExcelFromList
             {
                 return Sheets.Where(x => x.SheetName == sheetName).Any();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
-        
-        
+
+        /// <summary>
+        /// Saves the workbook to an Excel file.
+        /// </summary>
+        public void SaveAs(string _fullFileName)
+        {
+            fullFileName = _fullFileName;
+            try
+            {
+                if (File.Exists(fullFileName))
+                {
+                    File.Delete(fullFileName);
+                    Utils.WaitForFileReady(fullFileName);
+                }
+
+                bytesArray = GetBytesArray();
+                using (var file = File.OpenWrite(fullFileName))
+                {
+                    file.Write(bytesArray, 0, bytesArray.Length);
+                }
+                Utils.WaitForFileReady(fullFileName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Opens saved Excel file with OS default program.
+        /// </summary>
+        public void Open()
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(fullFileName))
+                {
+                    if (File.Exists(fullFileName))
+                        Process.Start(fullFileName);
+                    else
+                        throw new FileNotFoundException("Unable to open file.", fullFileName);
+                }
+                else
+                {
+                    throw new FileNotFoundException("Unable to open file, no file name was provided or SaveAs hasn't been called.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -383,6 +392,7 @@ namespace ExcelFromList
                     titleCell.Style.Font.Bold = true;
                     titleCell.Style.Font.Size = 14;
                     titleCell.Style.Font.Name = "Arial";
+                    titleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     titleCell.Value = sheet.ExcelStyleConfig.Base64Image != null ? titlePadding + sheet.ExcelStyleConfig.Title : sheet.ExcelStyleConfig.Title;
                     ws.Row(1).Height = rowHeight;
 
@@ -404,6 +414,7 @@ namespace ExcelFromList
                                 ws.InsertRow(insRowNum, 1);
                             }
                             subtitleCell.Style.Font.Name = "Arial";
+                            subtitleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                             ws.Row(insRowNum).Height = rowHeight;
                             subtitleCell.Value = sheet.ExcelStyleConfig.Base64Image != null ? subtitlePadding + sheet.ExcelStyleConfig.Subtitles[i] : sheet.ExcelStyleConfig.Subtitles[i];
                         }
@@ -433,6 +444,7 @@ namespace ExcelFromList
                                 ws.Row(insRowNum).Height = rowHeight;
                             }
                             subtitleCell.Style.Font.Name = "Arial";
+                            subtitleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         }
                     }
                 }
@@ -671,23 +683,6 @@ namespace ExcelFromList
         }
         #endregion
 
-        #region Support Methods
-        private string SplitCamelCase(string input)
-        {
-            var result = string.Empty;
-            if (input != null)
-                try
-                {
-                    result = Regex.Replace(input, "([A-Z])", " $1", RegexOptions.Compiled).Trim();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            return result;
-        }
-        #endregion
-
         #region IDisposable
         public void Dispose()
         {
@@ -770,11 +765,11 @@ namespace ExcelFromList
         /// <summary>
         /// Gets or sets the header font color, defaults to LightGray
         /// </summary>
-        public Color HeaderFontColor { get; set; } = Color.LightGray;
+        public Color HeaderFontColor { get; set; } = Color.Lavender;
         /// <summary>
         /// Gets or sets the header background color, defaults to DarkSlateGray
         /// </summary>
-        public Color HeaderBackgroundColor { get; set; } = Color.DarkSlateGray;
+        public Color HeaderBackgroundColor { get; set; } = Color.Teal;
         /// <summary>
         /// Enable to draw a border around each header cell, defaults to false
         /// </summary>
