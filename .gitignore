@@ -11,3 +11,4 @@
 /ExcelFromList/ExcelFromList/bin/Debug/netstandard2.0
 /ExcelFromList/.vs/ExcelFromList/DesignTimeBuild
 *.nupkg
+*.nuspec
