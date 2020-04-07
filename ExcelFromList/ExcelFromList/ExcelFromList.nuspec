@@ -7,16 +7,16 @@
     <id>ExcelFromList</id>
     <version>1.0.1</version>
     <title>ExcelFromList</title>
-    <description>Easily create stylized excel workbooks from lists. Uses EPPlus internally.</description>
+    <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles and formats. Uses the EPPlus engine.</description>
     <releaseNotes>Improved exception handling, title/subtitles adjustments</releaseNotes>
     <authors>Raul Marquez</authors>
     <copyright>Copyright 2020 Raul Marquez</copyright>
-    <!--<license type="file">License.txt</license>-->
     <license type="expression">GPL-3.0-only</license>
     <projectUrl>https://github.com/RaulMarquezInclan/ExcelFromList</projectUrl>
-    <!--<icon>images\icon.png</icon>-->
     <owners>Raul Marquez</owners>
     <tags>excel list listtoexcel</tags>
+    <!--<icon>images\icon.png</icon>-->
+    <!--<license type="file">License.txt</license>-->
 
     <dependencies>
       <group targetFramework="net461">
