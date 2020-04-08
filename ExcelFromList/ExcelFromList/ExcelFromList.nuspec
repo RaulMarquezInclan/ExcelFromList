@@ -8,7 +8,7 @@
     <version>1.0.3</version>
     <title>ExcelFromList</title>
     <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine.</description>
-    <releaseNotes>Added font and background color for data cells</releaseNotes>
+    <releaseNotes>Fixed freeze panes row number, added duplicate sheet name validation</releaseNotes>
     <authors>Raul Marquez</authors>
     <copyright>Copyright 2020 Raul Marquez</copyright>
     <license type="expression">GPL-3.0-only</license>
