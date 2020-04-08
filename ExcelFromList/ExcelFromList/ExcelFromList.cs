@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using OfficeOpenXml.Drawing;
 
 namespace ExcelFromList
@@ -40,7 +39,7 @@ namespace ExcelFromList
 
         #region Public Methods
         /// <summary>
-        /// Returns the byte array from ExcelWorkBook.
+        /// Returns the ExcelWorkBook bytes array
         /// </summary>
         /// <returns></returns>
         public byte[] GetBytesArray()
@@ -253,7 +252,7 @@ namespace ExcelFromList
         }
 
         /// <summary>
-        /// Saves the workbook to an Excel file.
+        /// Saves the workbook to an Excel file
         /// </summary>
         public void SaveAs(string _fullFileName)
         {
@@ -280,7 +279,7 @@ namespace ExcelFromList
         }
 
         /// <summary>
-        /// Opens saved Excel file with OS default program.
+        /// Opens saved Excel file with OS default program
         /// </summary>
         public void Open()
         {
@@ -629,6 +628,17 @@ namespace ExcelFromList
                             dataCell.Value = propValue.ToString();
                         }
                     }
+
+                    if (sheet.ExcelStyleConfig.BackgroundColor != null)
+                    {
+                        dataCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        dataCell.Style.Fill.BackgroundColor.SetColor((Color)sheet.ExcelStyleConfig.BackgroundColor);
+                    }
+
+                    if (sheet.ExcelStyleConfig.FontColor != null)
+                    {
+                        dataCell.Style.Font.Color.SetColor((Color)sheet.ExcelStyleConfig.FontColor);
+                    }
                     #endregion
 
                     #region Borders
@@ -716,6 +726,28 @@ namespace ExcelFromList
         /// Enable to freeze the first row, defaults to true
         /// </summary>
         public bool FreezePanes { get; set; } = true;
+        /// <summary>
+        /// Gets or sets the number of columns to insert before column A, defaults to 0
+        /// </summary>
+        public int PaddingColumns { get; set; } = 0;
+        /// <summary>
+        /// Gets or sets the number of rows to insert before row 1, defaults to 0
+        /// </summary>
+        public int PaddingRows { get; set; } = 0;
+
+        // Title configs
+        /// <summary>
+        /// Gets or sets the title of the sheet, defaults to null
+        /// </summary>
+        public string Title { get; set; } = null;
+        /// <summary>
+        /// Gets or sets the subtitles of the sheet, defaults to new string[0]
+        /// </summary>
+        public string[] Subtitles { get; set; } = new string[0];
+        /// <summary>
+        /// Gets or sets a base64 image to be placed on the sheet, defaults to null
+        /// </summary>
+        public string Base64Image { get; set; } = null;
 
         // Data type formatting
         /// <summary>
@@ -735,7 +767,15 @@ namespace ExcelFromList
         /// </summary>
         public string IntFormat { get; set; } = "#,##0_);[Red]-#,##0";
 
-        // Cell configs
+        // Data cell configs
+        /// <summary>
+        /// Gets or sets data cell font color, defaults to null
+        /// </summary>
+        public Color? FontColor { get; set; } = null;
+        /// <summary>
+        /// Gets or sets data cell background color, defaults to null
+        /// </summary>
+        public Color? BackgroundColor { get; set; } = null;
         /// <summary>
         /// Enable to draw a border around each data cell, defaults to false
         /// </summary>
@@ -745,29 +785,29 @@ namespace ExcelFromList
         /// </summary>
         public bool BorderAround { get; set; } = false;
         /// <summary>
-        /// Gets or sets the border color around each data cell, defaults to Black
+        /// Gets or sets the border color around each data cell, defaults to Color.Black
         /// </summary>
         public Color BorderColor { get; set; } = Color.Black;
         /// <summary>
-        /// Gets or sets the border color around the data range, defaults to Black
+        /// Gets or sets the border color around the data range, defaults to Color.Black
         /// </summary>
         public Color BorderAroundColor { get; set; } = Color.Black;
         /// <summary>
-        /// Gets or sets the border style around each data cell, defaults to Thin
+        /// Gets or sets the border style around each data cell, defaults to ExcelBorderStyle.Thin
         /// </summary>
         public ExcelBorderStyle BorderStyle { get; set; } = ExcelBorderStyle.Thin;
         /// <summary>
-        /// Gets or sets the border style around the data range, defaults to Thin
+        /// Gets or sets the border style around the data range, defaults to ExcelBorderStyle.Thin
         /// </summary>
         public ExcelBorderStyle BorderAroundStyle { get; set; } = ExcelBorderStyle.Thin;
 
-        // Header configs
+        // Header cell configs
         /// <summary>
-        /// Gets or sets the header font color, defaults to LightGray
+        /// Gets or sets the header font color, defaults to Color.LightGray
         /// </summary>
         public Color HeaderFontColor { get; set; } = Color.Lavender;
         /// <summary>
-        /// Gets or sets the header background color, defaults to DarkSlateGray
+        /// Gets or sets the header background color, defaults to Color.DarkSlateGray
         /// </summary>
         public Color HeaderBackgroundColor { get; set; } = Color.Teal;
         /// <summary>
@@ -779,43 +819,21 @@ namespace ExcelFromList
         /// </summary>
         public bool HeaderBorderAround { get; set; } = false;
         /// <summary>
-        /// Gets or sets the border color around each header cell, defaults to Black
+        /// Gets or sets the border color around each header cell, defaults to Color.Black
         /// </summary>
         public Color HeaderBorderColor { get; set; } = Color.Black;
         /// <summary>
-        /// Gets or sets the border color around the header range, defaults to Black
+        /// Gets or sets the border color around the header range, defaults to Color.Black
         /// </summary>
         public Color HeaderBorderAroundColor { get; set; } = Color.Black;
         /// <summary>
-        /// Gets or sets the border style around each header cell, defaults to Thin
+        /// Gets or sets the border style around each header cell, defaults to ExcelBorderStyle.Thin
         /// </summary>
         public ExcelBorderStyle HeaderBorderStyle { get; set; } = ExcelBorderStyle.Thin;
         /// <summary>
-        /// Gets or sets the border style around the header range, defaults to Thin
+        /// Gets or sets the border style around the header range, defaults to ExcelBorderStyle.Thin
         /// </summary>
         public ExcelBorderStyle HeaderBorderAroundStyle { get; set; } = ExcelBorderStyle.Thin;
-
-        // Extra configs
-        /// <summary>
-        /// Gets or sets the number of columns to insert before column A, defaults to 0
-        /// </summary>
-        public int PaddingColumns { get; set; } = 0;
-        /// <summary>
-        /// Gets or sets the number of rows to insert before row 1, defaults to 0
-        /// </summary>
-        public int PaddingRows { get; set; } = 0;
-        /// <summary>
-        /// Gets or sets the title of the sheet, defaults to null
-        /// </summary>
-        public string Title { get; set; } = null;
-        /// <summary>
-        /// Gets or sets the subtitles of the sheet, defaults to empty string array
-        /// </summary>
-        public string[] Subtitles { get; set; } = new string[0];
-        /// <summary>
-        /// Gets or sets a base64 image to be placed on the sheet, defaults to null
-        /// </summary>
-        public string Base64Image { get; set; } = null;
         #endregion
     }
 

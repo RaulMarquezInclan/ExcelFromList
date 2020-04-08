@@ -5,10 +5,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <id>ExcelFromList</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>ExcelFromList</title>
-    <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles and formats. Uses the EPPlus engine.</description>
-    <releaseNotes>Improved exception handling, title/subtitles adjustments</releaseNotes>
+    <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine.</description>
+    <releaseNotes>Added font and background color for data cells</releaseNotes>
     <authors>Raul Marquez</authors>
     <copyright>Copyright 2020 Raul Marquez</copyright>
     <license type="expression">GPL-3.0-only</license>
