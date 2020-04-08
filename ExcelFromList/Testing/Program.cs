@@ -1,8 +1,7 @@
-﻿using ExcelFromList;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using OfficeOpenXml.Style;
+using ExcelFromList;
 
 namespace Testing
 {
@@ -197,9 +196,9 @@ namespace Testing
         static void Main(string[] args)
         {
 
-            //DefaultStyles();
+            DefaultStyles();
 
-            WithTitleAndSubtitles();
+            //WithTitleAndSubtitles();
 
             //WithTitleAndSubtitlesAndImage();
 

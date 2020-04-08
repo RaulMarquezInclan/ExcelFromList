@@ -140,12 +140,19 @@ namespace ExcelFromList
 
             try
             {
-                Sheets.Add(new Sheet
+                if (!SheetExists(sheetName))
                 {
-                    SheetName = sheetName,
-                    ExcelStyleConfig = null,
-                    Data = list.Cast<object>().ToList()
-                });
+                    Sheets.Add(new Sheet
+                    {
+                        SheetName = sheetName,
+                        ExcelStyleConfig = null,
+                        Data = list.Cast<object>().ToList()
+                    });
+                }
+                else
+                {
+                    throw new Exception("A sheet with the same name already exists in the workbook.");
+                }
             }
             catch (Exception ex)
             {
@@ -176,12 +183,19 @@ namespace ExcelFromList
 
             try
             {
-                Sheets.Add(new Sheet
+                if (!SheetExists(sheetName))
                 {
-                    SheetName = sheetName,
-                    ExcelStyleConfig = esc,
-                    Data = list.Cast<object>().ToList()
-                });
+                    Sheets.Add(new Sheet
+                    {
+                        SheetName = sheetName,
+                        ExcelStyleConfig = esc,
+                        Data = list.Cast<object>().ToList()
+                    });
+                }
+                else
+                {
+                    throw new Exception("A sheet with the same name already exists in the workbook.");
+                }
             }
             catch (Exception ex)
             {
@@ -321,6 +335,7 @@ namespace ExcelFromList
                 #endregion
 
                 #region Show Headers / Freeze Panes
+                var numRowsToInsert = 4;
                 if (sheet.ExcelStyleConfig.ShowHeaders)
                 {
                     if (sheet.ExcelStyleConfig.FreezePanes)
@@ -328,21 +343,21 @@ namespace ExcelFromList
                         var skipRows = 0;
                         if (sheet.ExcelStyleConfig.Base64Image != null)
                         {
-                            skipRows = 3 + sheet.ExcelStyleConfig.PaddingRows;
+                            skipRows = numRowsToInsert + sheet.ExcelStyleConfig.PaddingRows;
                             if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
                             {
                                 if (sheet.ExcelStyleConfig.Title != null)
                                 {
-                                    if (sheet.ExcelStyleConfig.Subtitles.Length > 2)
+                                    if (sheet.ExcelStyleConfig.Subtitles.Length > numRowsToInsert - 1)
                                     {
-                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - 2;
+                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - (numRowsToInsert - 1);
                                     }
                                 }
                                 else
                                 {
-                                    if (sheet.ExcelStyleConfig.Subtitles.Length > 3)
+                                    if (sheet.ExcelStyleConfig.Subtitles.Length > numRowsToInsert)
                                     {
-                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - 3;
+                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - numRowsToInsert;
                                     }
                                 }
                             }
@@ -358,6 +373,13 @@ namespace ExcelFromList
                                     skipRows++;
                                 }
                             }
+                            else
+                            {
+                                if (sheet.ExcelStyleConfig.Title != null)
+                                {
+                                    skipRows++;
+                                }
+                            }
                         }
                         ws.View.FreezePanes(2 + skipRows, 1);
                     }
@@ -366,7 +388,6 @@ namespace ExcelFromList
 
                 #region Prepare area for Image
                 var rowHeight = 18.75;
-                var numRowsToInsert = 4;
                 if (sheet.ExcelStyleConfig.Base64Image != null)
                 {
                     ws.InsertRow(1, numRowsToInsert);
