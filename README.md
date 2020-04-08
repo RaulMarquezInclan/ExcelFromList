@@ -14,7 +14,7 @@ You can run these same examples in the <b>Testing</b> project.
 ```
 ![Default styles](https://i.imgur.com/MwOVdeQ.png)
 
-For the rest of the examples a style object has been privided
+For the rest of the examples a style object has been provided
 ## With title and subtitles
 ```
   var wb = new ExcelWorkBook();
@@ -135,12 +135,12 @@ For the rest of the examples a style object has been privided
 
 ## Available in the ExcelWorkBook class
 ### Methods
-<b>GetBytesArray:</b> Returns the ExcelWorkBook bytes array<br />
-<b>AddSheet:</b> Adds a sheet to the worksheet, will apply style config if provided<br />
-<b>RemoveSheet:</b> Removes a sheet from the worksheet<br />
-<b>ClearWorkSheet:</b> Removes all sheets from worksheet<br />
-<b>SheetExists:</b> Checks if a specific sheet exists<br />
-<b>SaveAs:</b> Saves the workbook to an Excel file<br />
-<b>Open:</b> Opens saved Excel file with OS default program<br />
+<b>GetBytesArray():</b> Returns the ExcelWorkBook bytes array<br />
+<b>AddSheet(string sheetName):</b> Adds a sheet to the worksheet, will apply style config if provided<br />
+<b>RemoveSheet(string sheetName):</b> Removes a sheet from the worksheet<br />
+<b>ClearWorkSheet():</b> Removes all sheets from worksheet<br />
+<b>SheetExists(string sheetName):</b> Checks if a specific sheet exists<br />
+<b>SaveAs():</b> Saves the workbook to an Excel file<br />
+<b>Open():</b> Opens saved Excel file with OS default program<br />
 
 For new features you can contact me at raulmarquezi@gmail.com
