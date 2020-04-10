@@ -104,7 +104,12 @@ For the rest of the examples a style object has been provided
 ### Title configs
 <b>Title:</b> Gets or sets the title of the sheet, defaults to <b>null</b><br />
 <b>Subtitles:</b> Gets or sets the subtitles of the sheet, defaults to <b>new string[0]</b><br />
-<b>Base64Image:</b> Gets or sets a base64 image to be placed on the sheet, defaults to <b>null</b><br />
+<b>TitleImage:</b> Gets or sets an image to be placed on the sheet, defaults to <b>new TitlePicture()</b><br />
+<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FromBase64</b>: Gets or sets image from Base64, defaults to <b>null</b><br />
+<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FromFile</b>: Gets or sets image from file, defaults to <b>null</b><br />
+<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FromUrl</b>: Gets or sets image from url, defaults to <b>null</b><br />
+<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HasValue</b>: Indicates if at least one image source has value, defaults to <b>false</b><br />
+<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IsValid</b>: Indicates if value is valid, no source or more than one source (false), only one source (true), defaults to <b>false</b><br />
 
 ### Data type formatting
 <b>DateFormat:</b> Gets or sets custom Excel format string, defaults to <b>m/d/yyyy</b><br />
