@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Collections.Generic;
 using OfficeOpenXml.Drawing;
+using System.Net;
 
 namespace ExcelFromList
 {
@@ -341,7 +342,7 @@ namespace ExcelFromList
                     if (sheet.ExcelStyleConfig.FreezePanes)
                     {
                         var skipRows = 0;
-                        if (sheet.ExcelStyleConfig.Base64Image != null)
+                        if (sheet.ExcelStyleConfig.TitleImage.IsValid)
                         {
                             skipRows = numRowsToInsert + sheet.ExcelStyleConfig.PaddingRows;
                             if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
@@ -388,7 +389,7 @@ namespace ExcelFromList
 
                 #region Prepare area for Image
                 var rowHeight = 18.75;
-                if (sheet.ExcelStyleConfig.Base64Image != null)
+                if (sheet.ExcelStyleConfig.TitleImage.HasValue)
                 {
                     ws.InsertRow(1, numRowsToInsert);
                     for (int i = 1; i <= numRowsToInsert; i++)
@@ -407,13 +408,13 @@ namespace ExcelFromList
 
                 if (sheet.ExcelStyleConfig.Title != null)
                 {
-                    if (sheet.ExcelStyleConfig.Base64Image == null) ws.InsertRow(1, 1);
+                    if (!sheet.ExcelStyleConfig.TitleImage.HasValue) ws.InsertRow(1, 1);
                     titleCell = ws.Cells["A1"];
                     titleCell.Style.Font.Bold = true;
                     titleCell.Style.Font.Size = 14;
                     titleCell.Style.Font.Name = "Arial";
                     titleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    titleCell.Value = sheet.ExcelStyleConfig.Base64Image != null ? titlePadding + sheet.ExcelStyleConfig.Title : sheet.ExcelStyleConfig.Title;
+                    titleCell.Value = sheet.ExcelStyleConfig.TitleImage.HasValue ? titlePadding + sheet.ExcelStyleConfig.Title : sheet.ExcelStyleConfig.Title;
                     ws.Row(1).Height = rowHeight;
 
                     if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
@@ -422,7 +423,7 @@ namespace ExcelFromList
                         {
                             insRowNum = i + 2;
                             subtitleCell = ws.Cells["A" + insRowNum];
-                            if (sheet.ExcelStyleConfig.Base64Image != null)
+                            if (sheet.ExcelStyleConfig.TitleImage.HasValue)
                             {
                                 if (insRowNum > numRowsToInsert)
                                 {
@@ -436,7 +437,7 @@ namespace ExcelFromList
                             subtitleCell.Style.Font.Name = "Arial";
                             subtitleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                             ws.Row(insRowNum).Height = rowHeight;
-                            subtitleCell.Value = sheet.ExcelStyleConfig.Base64Image != null ? subtitlePadding + sheet.ExcelStyleConfig.Subtitles[i] : sheet.ExcelStyleConfig.Subtitles[i];
+                            subtitleCell.Value = sheet.ExcelStyleConfig.TitleImage.HasValue ? subtitlePadding + sheet.ExcelStyleConfig.Subtitles[i] : sheet.ExcelStyleConfig.Subtitles[i];
                         }
                     }
                 }
@@ -448,7 +449,7 @@ namespace ExcelFromList
                         {
                             insRowNum = i + 1;
                             subtitleCell = ws.Cells["A" + insRowNum];
-                            if (sheet.ExcelStyleConfig.Base64Image != null)
+                            if (sheet.ExcelStyleConfig.TitleImage.HasValue)
                             {
                                 if (insRowNum > numRowsToInsert)
                                 {
@@ -483,18 +484,49 @@ namespace ExcelFromList
                 #endregion
 
                 #region Insert Image
-                if (sheet.ExcelStyleConfig.Base64Image != null)
+                if (sheet.ExcelStyleConfig.TitleImage.HasValue)
                 {
-                    Image image;
+                    Image image = new Bitmap(1,1);
                     Image resizedImage;
-                    var imageBytes = Convert.FromBase64String(sheet.ExcelStyleConfig.Base64Image);
-                    using (MemoryStream ms = new MemoryStream(imageBytes))
+                    if (sheet.ExcelStyleConfig.TitleImage.IsValid)
                     {
-                        image = Image.FromStream(ms);
-                    }
+                        // From Base64 string
+                        if (sheet.ExcelStyleConfig.TitleImage.FromBase64 != null)
+                        {
+                            var imageBytes = Convert.FromBase64String(sheet.ExcelStyleConfig.TitleImage.FromBase64);
+                            using (MemoryStream ms = new MemoryStream(imageBytes))
+                            {
+                                image = Image.FromStream(ms);
+                            }
+                        }
 
+                        // From file
+                        if (sheet.ExcelStyleConfig.TitleImage.FromFile != null)
+                        {
+                            image = new Bitmap(sheet.ExcelStyleConfig.TitleImage.FromFile);
+                        }
+
+                        // From url
+                        if (sheet.ExcelStyleConfig.TitleImage.FromUrl != null)
+                        {
+                            using (WebClient webClient = new WebClient())
+                            {
+                                using (Stream stream = webClient.OpenRead(sheet.ExcelStyleConfig.TitleImage.FromUrl))
+                                {
+                                    image = Image.FromStream(stream);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Utils.NoImage)))
+                        {
+                            image = Image.FromStream(ms);
+                        }
+                    }
                     resizedImage = Utils.ResizeImage(image, 100);
-                    ExcelPicture excelImage = ws.Drawings.AddPicture("Image", resizedImage);
+                    ExcelPicture excelImage = ws.Drawings.AddPicture("Title image", resizedImage);
                     excelImage.SetPosition(sheet.ExcelStyleConfig.PaddingRows, 0, sheet.ExcelStyleConfig.PaddingColumns, 0);
                 }
                 #endregion
@@ -728,7 +760,6 @@ namespace ExcelFromList
     /// </summary>
     public class ExcelStyleConfig
     {
-        #region Public Properties
         // Sheet configs
         /// <summary>
         /// Enable to show headers (taken from the property name), defaults to true
@@ -766,9 +797,9 @@ namespace ExcelFromList
         /// </summary>
         public string[] Subtitles { get; set; } = new string[0];
         /// <summary>
-        /// Gets or sets a base64 image to be placed on the sheet, defaults to null
+        /// Gets or sets an image to be placed on the sheet, defaults to new TitlePicture()
         /// </summary>
-        public string Base64Image { get; set; } = null;
+        public Picture TitleImage { get; set; } = new Picture();
 
         // Data type formatting
         /// <summary>
@@ -855,7 +886,42 @@ namespace ExcelFromList
         /// Gets or sets the border style around the header range, defaults to ExcelBorderStyle.Thin
         /// </summary>
         public ExcelBorderStyle HeaderBorderAroundStyle { get; set; } = ExcelBorderStyle.Thin;
-        #endregion
+        /// <summary>
+        /// Gets or sets the source and value of the desired image (FromBase64, FromFile, FromUrl)
+        /// </summary>
+        public class Picture
+        {
+            /// <summary>
+            /// Gets or sets image from Base64
+            /// </summary>
+            public string FromBase64 { get; set; } = null;
+            /// <summary>
+            /// Gets or sets image from file
+            /// </summary>
+            public string FromFile { get; set; } = null;
+            /// <summary>
+            /// Gets or sets image from url
+            /// </summary>
+            public string FromUrl { get; set; } = null;
+            /// <summary>
+            /// Indicates if at least one image source has value
+            /// </summary>
+            public bool HasValue { get { return FromBase64 != null || FromFile != null || FromUrl != null; } }
+            /// <summary>
+            /// Indicates if configuration is valid, no source or more than one source (false), only one source (true)
+            /// </summary>
+            public bool IsValid
+            {
+                get
+                {
+                    int propsWithValueQty = 0;
+                    propsWithValueQty += FromBase64 != null ? 1 : 0;
+                    propsWithValueQty += FromFile != null ? 1 : 0;
+                    propsWithValueQty += FromUrl != null ? 1 : 0;
+                    return HasValue ? !(propsWithValueQty > 1) : false;
+                }
+            }
+        }
     }
 
 }
