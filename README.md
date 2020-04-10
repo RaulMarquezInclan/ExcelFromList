@@ -46,7 +46,10 @@ For the rest of the examples a style object has been provided
           "Compiled by the Food Bank",
           "From National Manufactures"
       },
-      Base64Image = "iVBORw..." // string trucated for brevity of example
+      TitleImage = new Picture()
+      {
+          FromBase64 = "iVBORw..." // string trucated for brevity of example
+      }
   };
 
   wb.AddSheet("Shelf Life", shelfLifeData, style);
@@ -66,7 +69,10 @@ For the rest of the examples a style object has been provided
           "Compiled by the Food Bank",
           "From National Manufactures"
       },
-      Base64Image = "iVBORw..." // string trucated for brevity of example
+      TitleImage = new Picture()
+      {
+          FromFile = @"x:\titleImage.jpg"
+      }
   };
   var sheetTwoStyle = new ExcelStyleConfig
   {
@@ -76,7 +82,10 @@ For the rest of the examples a style object has been provided
           "List of EDNP products",
           "Audited by category"
       },
-      Base64Image = "iVBORw..." // string trucated for brevity of example
+      TitleImage = new Picture()
+      {
+          FromUrl = @"http://www.images.com/titleImage.jpg"
+      },
       ShowGridLines = false,
       BorderAround = true,
       Border = true,
