@@ -129,7 +129,7 @@ namespace ExcelFromList
         /// <param name="classList"></param>
         public void AddSheet<T>(string sheetName, List<T> list)
         {
-            if (string.IsNullOrWhiteSpace(sheetName))
+            if (Utils.IsNullOrWhiteSpace(sheetName))
             {
                 throw new Exception("Sheet name cannot be null");
             }
@@ -168,7 +168,7 @@ namespace ExcelFromList
         /// <param name="classList"></param>
         public void AddSheet<T>(string sheetName, List<T> list, ExcelStyleConfig esc)
         {
-            if (string.IsNullOrWhiteSpace(sheetName))
+            if (Utils.IsNullOrWhiteSpace(sheetName))
             {
                 throw new Exception("Sheet name cannot be null");
             }
@@ -209,7 +209,7 @@ namespace ExcelFromList
         /// <param name="sheetName"></param>
         public void RemoveSheet(string sheetName)
         {
-            if (string.IsNullOrWhiteSpace(sheetName))
+            if (Utils.IsNullOrWhiteSpace(sheetName))
             {
                 throw new Exception("Sheet name cannot be null");
             }
@@ -250,7 +250,7 @@ namespace ExcelFromList
         /// <returns></returns>
         public bool SheetExists(string sheetName)
         {
-            if (string.IsNullOrWhiteSpace(sheetName))
+            if (Utils.IsNullOrWhiteSpace(sheetName))
             {
                 throw new Exception("Sheet name cannot be null");
             }
@@ -299,7 +299,7 @@ namespace ExcelFromList
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(fullFileName))
+                if (!(Utils.IsNullOrWhiteSpace(fullFileName)))
                 {
                     if (File.Exists(fullFileName))
                         Process.Start(fullFileName);

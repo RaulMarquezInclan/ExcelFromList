@@ -12,3 +12,5 @@
 /ExcelFromList/.vs/ExcelFromList/DesignTimeBuild
 *.nupkg
 *.nuspec
+/ExcelFromList/ExcelFromList/bin/Debug
+/ExcelFromList/ExcelFromList/Properties

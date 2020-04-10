@@ -10,28 +10,32 @@
     <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine.</description>
     <releaseNotes>Fixed freeze panes row number, added duplicate sheet name validation</releaseNotes>
     <authors>Raul Marquez</authors>
-    <copyright>Copyright 2020 Raul Marquez</copyright>
-    <license type="expression">GPL-3.0-only</license>
-    <projectUrl>https://github.com/RaulMarquezInclan/ExcelFromList</projectUrl>
     <owners>Raul Marquez</owners>
+    <copyright>Copyright 2020 Raul Marquez</copyright>
+    <projectUrl>https://github.com/RaulMarquezInclan/ExcelFromList</projectUrl>
+    <license type="expression">GPL-3.0-only</license>
     <tags>excel list listtoexcel</tags>
     <!--<icon>images\icon.png</icon>-->
     <!--<license type="file">License.txt</license>-->
 
-    <dependencies>
+    <!--<dependencies>
       <group targetFramework="net461">
-        <dependency id="EPPlus" version="5.0.4" />
-        <dependency id="System.Drawing.Common" version="4.7.0" />
+        <dependency id="EPPlus" version="5.1.0" />
       </group>
-    </dependencies>
+    </dependencies>-->
 
+    <dependencies>
+      <dependency id="EPPlus" version="5.1.0" />
+    </dependencies>
   </metadata>
 
   <files>
-    <!--<file src="Licenses\License.txt" target="" />-->
-    <file src="bin\Debug\netstandard2.0\ExcelFromList.dll" target="lib\net461" />
-    <file src="ExcelFromList.xml" target="lib\net461" />
-    <!--<file src="images\icon.png" target="images\" />-->
+    <file src="bin\Debug\net35\ExcelFromList.dll" target="lib\net35" />
+    <file src="bin\Debug\net35\ExcelFromList.xml" target="lib\net35" />
+    <!--<file src="bin\Debug\net35\ExcelFromList.dll" target="lib\net35" />
+    <file src="bin\Debug\net35\ExcelFromList.xml" target="lib\net35" />
+    <file src="Licenses\License.txt" target="" />
+    <file src="images\icon.png" target="images\" />-->
   </files>
 
 </package>
