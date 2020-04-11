@@ -197,7 +197,7 @@ namespace Testing
         static void Main(string[] args)
         {
 
-            DefaultStyles();
+            //DefaultStyles();
 
             //WithTitleAndSubtitles();
 
@@ -205,7 +205,7 @@ namespace Testing
 
             //WithTitleAndSubtitlesAndImageAndTwoSheets();
 
-            //WithTitleAndSubtitlesAndSkippingThreeColumns();
+            WithTitleAndSubtitlesAndSkippingThreeColumns();
 
         }
 
@@ -325,11 +325,11 @@ namespace Testing
                 HeaderFontColor = Color.Black,
                 ExcludedColumnIndexes = new int[]
                 {
-                    2, 5, 6
+                    2, 4
                 }
             };
 
-            wb.AddSheet("Food Nutrients", shelfLifeData, style);
+            wb.AddSheet("Food Nutrients", foodInfoData, style);
             wb.SaveAs(outputFileName);
             wb.Open();
         }

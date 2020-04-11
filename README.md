@@ -123,14 +123,14 @@ var style = new ExcelStyleConfig
 	HeaderFontColor = Color.Black,
 	ExcludedColumnIndexes = new int[]
 	{
-		2, 5, 6
+		2, 4
 	}
 };
 
 wb.AddSheet("Food Nutrients", shelfLifeData, style);
 wb.SaveAs(outputFileName);
 ```
-![Title, subtitles, image, skipping three rows and cell stylings](https://i.imgur.com/pjoXQAb.png)
+![Title, subtitles, image, skipping three rows and cell stylings](https://i.imgur.com/BFid7jk.png)
 
 # Documentation
 ## Available in the ExcelStyleConfig class
