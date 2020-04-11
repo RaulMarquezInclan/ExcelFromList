@@ -20,13 +20,13 @@ A style object has been provided for the rest of the examples
   var wb = new ExcelWorkBook();
   var style = new ExcelStyleConfig
   {
-      Title = "Product Shelf Life List",
-      Subtitles = new string[]
-      {
-          "As of 2/1/06",
-          "Compiled by the Food Bank",
-          "From National Manufactures"
-      }
+		Title = "Product Shelf Life List",
+		Subtitles = new string[]
+		{
+			"As of 2/1/06",
+			"Compiled by the Food Bank",
+			"From National Manufactures"
+		}
   };
 
   wb.AddSheet("Shelf Life", shelfLifeData, style);
@@ -39,17 +39,17 @@ A style object has been provided for the rest of the examples
   var wb = new ExcelWorkBook();
   var style = new ExcelStyleConfig
   {
-      Title = "Product Shelf Life List",
-      Subtitles = new string[]
-      {
-          "As of 2/1/06",
-          "Compiled by the Food Bank",
-          "From National Manufactures"
-      },
-      TitleImage = new Picture()
-      {
-          FromBase64 = "iVBORw..." // string trucated for brevity of example
-      }
+		Title = "Product Shelf Life List",
+		Subtitles = new string[]
+		{
+			"As of 2/1/06",
+			"Compiled by the Food Bank",
+			"From National Manufactures"
+		},
+		TitleImage = new Picture()
+		{
+			FromBase64 = "iVBORw..." // string trucated for brevity of example
+		}
   };
 
   wb.AddSheet("Shelf Life", shelfLifeData, style);
@@ -65,13 +65,13 @@ A style object has been provided for the rest of the examples
       Title = "Product Shelf Life List",
       Subtitles = new string[]
       {
-          "As of 2/1/06",
-          "Compiled by the Food Bank",
-          "From National Manufactures"
+				"As of 2/1/06",
+				"Compiled by the Food Bank",
+				"From National Manufactures"
       },
       TitleImage = new Picture()
       {
-          FromFile = @"x:\titleImage.jpg"
+				FromFile = @"x:\titleImage.jpg"
       }
   };
   var sheetTwoStyle = new ExcelStyleConfig
@@ -79,12 +79,12 @@ A style object has been provided for the rest of the examples
       Title = "Food Nutrient Information",
       Subtitles = new string[]
       {
-          "List of EDNP products",
-          "Audited by category"
+				"List of EDNP products",
+				"Audited by category"
       },
       TitleImage = new Picture()
       {
-          FromUrl = @"http://www.images.com/titleImage.jpg"
+				FromUrl = @"http://www.images.com/titleImage.jpg"
       },
       ShowGridLines = false,
       BorderAround = true,
@@ -100,7 +100,7 @@ A style object has been provided for the rest of the examples
 ```
 ![Title, subtitles, image and two sheets](https://i.imgur.com/LpDg2pb.png)
 
-## With title, subtitles, image from Base64, skipping three rows and cell stylings
+## With title, subtitles, image from Base64, skipping two columns and cell stylings
 ```
 var wb = new ExcelWorkBook();
 var style = new ExcelStyleConfig
@@ -113,7 +113,7 @@ var style = new ExcelStyleConfig
 	},
 	TitleImage = new Picture()
 	{
-          FromBase64 = "iVBORw..." // string trucated for brevity of example
+		FromBase64 = "iVBORw..." // string trucated for brevity of example
 	},
 	ShowGridLines = false,
 	BorderAround = true,
