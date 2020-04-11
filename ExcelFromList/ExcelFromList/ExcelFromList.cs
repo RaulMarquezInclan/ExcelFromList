@@ -58,50 +58,53 @@ namespace ExcelFromList
                     {
                         ExcelWorksheet ws = excelPackage.Workbook.Worksheets.Add(sheet.SheetName);
                         sheet.ExcelStyleConfig = sheet.ExcelStyleConfig ?? new ExcelStyleConfig();
-                        var rowCtrl = 2;
-                        var rowIndex = 1;
+                        var ctrlRowIndex = 2;
+                        var dataRowIndex = 1;
 
                         // Generate rows
                         foreach (var record in sheet.Data)
                         {
-                            var columnCounter = 0;
-                            foreach (PropertyInfo colData in sheet.Columns)
+                            var displayColCounter = 0;
+                            var numCols = sheet.Columns.Count;
+                            for (var i = 0; i < numCols; i++)
                             {
-                                var colsLength = sheet.Columns.Count;
-                                var colIndex = columnCounter + 1;
+                                var currentColIndex = i + 1;
+                                var colData = sheet.Columns[i];
                                 var rowsLength = sheet.Data.Count;
-                                var cellAddress = columnLetters[columnCounter] + rowCtrl;
-
-                                // Header row
-                                if (sheet.ExcelStyleConfig.ShowHeaders)
+                                var cellAddress = columnLetters[displayColCounter] + ctrlRowIndex;
+                                if (ExclusionColumnsAreValid(sheet.ExcelStyleConfig.ExcludedColumnIndexes, currentColIndex, numCols))
                                 {
-                                    if (rowCtrl == 2)
+                                    // Header row
+                                    if (sheet.ExcelStyleConfig.ShowHeaders)
                                     {
-                                        ExcelRange headerCell = ws.Cells[columnLetters[columnCounter] + (rowCtrl - 1)];
-                                        headerCell.Value = Utils.SplitCamelCase(colData.Name);
-                                        headerCell = FormatHeaderCell(headerCell, colIndex, sheet.Columns.Count, sheet);
+                                        if (ctrlRowIndex == 2)
+                                        {
+                                            ExcelRange headerCell = ws.Cells[columnLetters[displayColCounter] + (ctrlRowIndex - 1)];
+                                            headerCell.Value = Utils.SplitCamelCase(colData.Name);
+                                            headerCell = FormatHeaderCell(headerCell, currentColIndex, numCols, sheet);
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                    if (FirstRow)
+                                    else
                                     {
-                                        rowCtrl = 1;
-                                        cellAddress = columnLetters[columnCounter] + rowCtrl;
-                                        FirstRow = false;
+                                        if (FirstRow)
+                                        {
+                                            ctrlRowIndex = 1;
+                                            cellAddress = columnLetters[displayColCounter] + ctrlRowIndex;
+                                            FirstRow = false;
+                                        }
                                     }
-                                }
 
-                                // Data row
-                                ExcelRange dataCell = ws.Cells[cellAddress];
-                                dataCell = FormatDataCell(dataCell, colData, record, colIndex, colsLength, rowsLength, rowIndex, sheet);
-                                columnCounter++;
+                                    // Data row
+                                    ExcelRange dataCell = ws.Cells[cellAddress];
+                                    dataCell = FormatDataCell(dataCell, colData, record, currentColIndex, numCols, rowsLength, dataRowIndex, sheet);
+                                    displayColCounter++;
+                                }
                             }
-                            rowCtrl++;
-                            rowIndex++;
+                            ctrlRowIndex++;
+                            dataRowIndex++;
                         }
 
-                        ApplyConfigs(ws, sheet);
+                        ApplyConfigs(ws, sheet.ExcelStyleConfig);
 
                     }
 
@@ -294,7 +297,7 @@ namespace ExcelFromList
         }
 
         /// <summary>
-        /// Opens saved Excel file with OS default program
+        /// Opens saved Excel file with default OS program
         /// </summary>
         public void Open()
         {
@@ -320,63 +323,109 @@ namespace ExcelFromList
         #endregion
 
         #region Private Methods
-        private void ApplyConfigs(ExcelWorksheet ws, Sheet sheet)
+        private bool ExclusionColumnsAreValid(int[] excludedColumnIndexes, int currentColIndex, int numCols)
+        {
+            try
+            {
+                var maxExcludedColIndex = 1;
+                var minExcludedColIndex = 1;
+                var exclusionColsExist = excludedColumnIndexes.Count() > 0;
+
+                if (exclusionColsExist)
+                {
+                    maxExcludedColIndex = excludedColumnIndexes.Max();
+                    minExcludedColIndex = excludedColumnIndexes.Min();
+                }
+
+                if (maxExcludedColIndex > numCols)
+                {
+                    throw new IndexOutOfRangeException("An exclusion column index greater than the total number of columns was provided. " +
+                        maxExcludedColIndex + "/" + numCols);
+                }
+                else if (minExcludedColIndex < 1)
+                {
+                    throw new IndexOutOfRangeException("An exclusion column index lesser than 1 was provided.");
+                }
+                else
+                {
+                    if (!exclusionColsExist)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        if (!excludedColumnIndexes.Contains(currentColIndex))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return false;
+        }
+
+        private void ApplyConfigs(ExcelWorksheet ws, ExcelStyleConfig excelStyleConfig)
         {
             try
             {
                 #region Auto Fit Columns
-                if (sheet.ExcelStyleConfig.AutoFitColumns)
+                if (excelStyleConfig.AutoFitColumns)
                 {
                     ws.Cells.AutoFitColumns();
                 }
                 #endregion
 
                 #region Show Grid Lines
-                ws.View.ShowGridLines = sheet.ExcelStyleConfig.ShowGridLines;
+                ws.View.ShowGridLines = excelStyleConfig.ShowGridLines;
                 #endregion
 
                 #region Show Headers / Freeze Panes
                 var numRowsToInsert = 4;
-                if (sheet.ExcelStyleConfig.ShowHeaders)
+                if (excelStyleConfig.ShowHeaders)
                 {
-                    if (sheet.ExcelStyleConfig.FreezePanes)
+                    if (excelStyleConfig.FreezePanes)
                     {
                         var skipRows = 0;
-                        if (sheet.ExcelStyleConfig.TitleImage.IsValid)
+                        if (excelStyleConfig.TitleImage.IsValid)
                         {
-                            skipRows = numRowsToInsert + sheet.ExcelStyleConfig.PaddingRows;
-                            if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
+                            skipRows = numRowsToInsert + excelStyleConfig.PaddingRows;
+                            if (excelStyleConfig.Subtitles.Length > 0)
                             {
-                                if (sheet.ExcelStyleConfig.Title != null)
+                                if (excelStyleConfig.Title != null)
                                 {
-                                    if (sheet.ExcelStyleConfig.Subtitles.Length > numRowsToInsert - 1)
+                                    if (excelStyleConfig.Subtitles.Length > numRowsToInsert - 1)
                                     {
-                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - (numRowsToInsert - 1);
+                                        skipRows += excelStyleConfig.Subtitles.Length - (numRowsToInsert - 1);
                                     }
                                 }
                                 else
                                 {
-                                    if (sheet.ExcelStyleConfig.Subtitles.Length > numRowsToInsert)
+                                    if (excelStyleConfig.Subtitles.Length > numRowsToInsert)
                                     {
-                                        skipRows += sheet.ExcelStyleConfig.Subtitles.Length - numRowsToInsert;
+                                        skipRows += excelStyleConfig.Subtitles.Length - numRowsToInsert;
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            skipRows = sheet.ExcelStyleConfig.PaddingRows;
-                            if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
+                            skipRows = excelStyleConfig.PaddingRows;
+                            if (excelStyleConfig.Subtitles.Length > 0)
                             {
-                                skipRows += sheet.ExcelStyleConfig.Subtitles.Length;
-                                if (sheet.ExcelStyleConfig.Title != null)
+                                skipRows += excelStyleConfig.Subtitles.Length;
+                                if (excelStyleConfig.Title != null)
                                 {
                                     skipRows++;
                                 }
                             }
                             else
                             {
-                                if (sheet.ExcelStyleConfig.Title != null)
+                                if (excelStyleConfig.Title != null)
                                 {
                                     skipRows++;
                                 }
@@ -389,7 +438,7 @@ namespace ExcelFromList
 
                 #region Prepare area for Image
                 var rowHeight = 18.75;
-                if (sheet.ExcelStyleConfig.TitleImage.HasValue)
+                if (excelStyleConfig.TitleImage.HasValue)
                 {
                     ws.InsertRow(1, numRowsToInsert);
                     for (int i = 1; i <= numRowsToInsert; i++)
@@ -406,24 +455,24 @@ namespace ExcelFromList
                 var titlePadding = "                    ";
                 var subtitlePadding = "                           ";
 
-                if (sheet.ExcelStyleConfig.Title != null)
+                if (excelStyleConfig.Title != null)
                 {
-                    if (!sheet.ExcelStyleConfig.TitleImage.HasValue) ws.InsertRow(1, 1);
+                    if (!excelStyleConfig.TitleImage.HasValue) ws.InsertRow(1, 1);
                     titleCell = ws.Cells["A1"];
                     titleCell.Style.Font.Bold = true;
                     titleCell.Style.Font.Size = 14;
                     titleCell.Style.Font.Name = "Arial";
                     titleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    titleCell.Value = sheet.ExcelStyleConfig.TitleImage.HasValue ? titlePadding + sheet.ExcelStyleConfig.Title : sheet.ExcelStyleConfig.Title;
+                    titleCell.Value = excelStyleConfig.TitleImage.HasValue ? titlePadding + excelStyleConfig.Title : excelStyleConfig.Title;
                     ws.Row(1).Height = rowHeight;
 
-                    if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
+                    if (excelStyleConfig.Subtitles.Length > 0)
                     {
-                        for (int i = 0; i < sheet.ExcelStyleConfig.Subtitles.Length; i++)
+                        for (int i = 0; i < excelStyleConfig.Subtitles.Length; i++)
                         {
                             insRowNum = i + 2;
                             subtitleCell = ws.Cells["A" + insRowNum];
-                            if (sheet.ExcelStyleConfig.TitleImage.HasValue)
+                            if (excelStyleConfig.TitleImage.HasValue)
                             {
                                 if (insRowNum > numRowsToInsert)
                                 {
@@ -437,31 +486,31 @@ namespace ExcelFromList
                             subtitleCell.Style.Font.Name = "Arial";
                             subtitleCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                             ws.Row(insRowNum).Height = rowHeight;
-                            subtitleCell.Value = sheet.ExcelStyleConfig.TitleImage.HasValue ? subtitlePadding + sheet.ExcelStyleConfig.Subtitles[i] : sheet.ExcelStyleConfig.Subtitles[i];
+                            subtitleCell.Value = excelStyleConfig.TitleImage.HasValue ? subtitlePadding + excelStyleConfig.Subtitles[i] : excelStyleConfig.Subtitles[i];
                         }
                     }
                 }
                 else
                 {
-                    if (sheet.ExcelStyleConfig.Subtitles.Length > 0)
+                    if (excelStyleConfig.Subtitles.Length > 0)
                     {
-                        for (int i = 0; i < sheet.ExcelStyleConfig.Subtitles.Length; i++)
+                        for (int i = 0; i < excelStyleConfig.Subtitles.Length; i++)
                         {
                             insRowNum = i + 1;
                             subtitleCell = ws.Cells["A" + insRowNum];
-                            if (sheet.ExcelStyleConfig.TitleImage.HasValue)
+                            if (excelStyleConfig.TitleImage.HasValue)
                             {
                                 if (insRowNum > numRowsToInsert)
                                 {
                                     ws.InsertRow(insRowNum, 1);
                                     ws.Row(insRowNum).Height = rowHeight;
                                 }
-                                subtitleCell.Value = subtitlePadding + sheet.ExcelStyleConfig.Subtitles[i];
+                                subtitleCell.Value = subtitlePadding + excelStyleConfig.Subtitles[i];
                             }
                             else
                             {
                                 ws.InsertRow(insRowNum, 1);
-                                subtitleCell.Value = sheet.ExcelStyleConfig.Subtitles[i];
+                                subtitleCell.Value = excelStyleConfig.Subtitles[i];
                                 ws.Row(insRowNum).Height = rowHeight;
                             }
                             subtitleCell.Style.Font.Name = "Arial";
@@ -472,28 +521,28 @@ namespace ExcelFromList
                 #endregion
 
                 #region Insert column/row
-                if (sheet.ExcelStyleConfig.PaddingColumns > 0)
+                if (excelStyleConfig.PaddingColumns > 0)
                 {
-                    ws.InsertColumn(1, sheet.ExcelStyleConfig.PaddingColumns);
+                    ws.InsertColumn(1, excelStyleConfig.PaddingColumns);
                 }
 
-                if (sheet.ExcelStyleConfig.PaddingRows > 0)
+                if (excelStyleConfig.PaddingRows > 0)
                 {
-                    ws.InsertRow(1, sheet.ExcelStyleConfig.PaddingRows);
+                    ws.InsertRow(1, excelStyleConfig.PaddingRows);
                 }
                 #endregion
 
                 #region Insert Image
-                if (sheet.ExcelStyleConfig.TitleImage.HasValue)
+                if (excelStyleConfig.TitleImage.HasValue)
                 {
-                    Image image = new Bitmap(1,1);
+                    Image image = new Bitmap(1, 1);
                     Image resizedImage;
-                    if (sheet.ExcelStyleConfig.TitleImage.IsValid)
+                    if (excelStyleConfig.TitleImage.IsValid)
                     {
                         // From Base64 string
-                        if (sheet.ExcelStyleConfig.TitleImage.FromBase64 != null)
+                        if (excelStyleConfig.TitleImage.FromBase64 != null)
                         {
-                            var imageBytes = Convert.FromBase64String(sheet.ExcelStyleConfig.TitleImage.FromBase64);
+                            var imageBytes = Convert.FromBase64String(excelStyleConfig.TitleImage.FromBase64);
                             using (MemoryStream ms = new MemoryStream(imageBytes))
                             {
                                 image = Image.FromStream(ms);
@@ -501,17 +550,17 @@ namespace ExcelFromList
                         }
 
                         // From file
-                        if (sheet.ExcelStyleConfig.TitleImage.FromFile != null)
+                        if (excelStyleConfig.TitleImage.FromFile != null)
                         {
-                            image = new Bitmap(sheet.ExcelStyleConfig.TitleImage.FromFile);
+                            image = new Bitmap(excelStyleConfig.TitleImage.FromFile);
                         }
 
                         // From url
-                        if (sheet.ExcelStyleConfig.TitleImage.FromUrl != null)
+                        if (excelStyleConfig.TitleImage.FromUrl != null)
                         {
                             using (WebClient webClient = new WebClient())
                             {
-                                using (Stream stream = webClient.OpenRead(sheet.ExcelStyleConfig.TitleImage.FromUrl))
+                                using (Stream stream = webClient.OpenRead(excelStyleConfig.TitleImage.FromUrl))
                                 {
                                     image = Image.FromStream(stream);
                                 }
@@ -527,7 +576,7 @@ namespace ExcelFromList
                     }
                     resizedImage = Utils.ResizeImage(image, 100);
                     ExcelPicture excelImage = ws.Drawings.AddPicture("Title image", resizedImage);
-                    excelImage.SetPosition(sheet.ExcelStyleConfig.PaddingRows, 0, sheet.ExcelStyleConfig.PaddingColumns, 0);
+                    excelImage.SetPosition(excelStyleConfig.PaddingRows, 0, excelStyleConfig.PaddingColumns, 0);
                 }
                 #endregion
             }
@@ -786,6 +835,10 @@ namespace ExcelFromList
         /// Gets or sets the number of rows to insert before row 1, defaults to 0
         /// </summary>
         public int PaddingRows { get; set; } = 0;
+        /// <summary>
+        /// Gets or sets which columns to exclude by index, range must be between 1 and the total number of columns, defaults to new int[0]
+        /// </summary>
+        public int[] ExcludedColumnIndexes { get; set; } = new int[0];
 
         // Title configs
         /// <summary>

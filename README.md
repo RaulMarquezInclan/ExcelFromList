@@ -6,7 +6,7 @@ In the below examples <b>outputFileName</b> is a string identifying a full path 
 
 You can run these same examples in the <b>Testing</b> project.
 
-## Default styles (no style object provided)
+## With default styles (no style object provided)
 ```
   var wb = new ExcelWorkBook();
   wb.AddSheet("Shelf Life", shelfLifeData);
@@ -14,7 +14,7 @@ You can run these same examples in the <b>Testing</b> project.
 ```
 ![Default styles](https://i.imgur.com/MwOVdeQ.png)
 
-For the rest of the examples a style object has been provided
+A style object has been provided for the rest of the examples
 ## With title and subtitles
 ```
   var wb = new ExcelWorkBook();
@@ -34,7 +34,7 @@ For the rest of the examples a style object has been provided
 ```
 ![Title and subtitles](https://i.imgur.com/sBWGHrM.png)
 
-## With title, subtitles and image
+## With title, subtitles and image from Base64
 ```
   var wb = new ExcelWorkBook();
   var style = new ExcelStyleConfig
@@ -57,7 +57,7 @@ For the rest of the examples a style object has been provided
 ```
 ![Title, subtitles and image](https://i.imgur.com/vEJp6Yx.png)
 
-## With title, subtitles, image, two sheets and cell stylings
+## With title, subtitles, image from file (sheetOneStyle) and url (sheetTwoStyle), two sheets and cell stylings
 ```
   var wb = new ExcelWorkBook();
   var sheetOneStyle = new ExcelStyleConfig
@@ -100,6 +100,38 @@ For the rest of the examples a style object has been provided
 ```
 ![Title, subtitles, image and two sheets](https://i.imgur.com/LpDg2pb.png)
 
+## With title, subtitles, image from Base64, skipping three rows and cell stylings
+```
+var wb = new ExcelWorkBook();
+var style = new ExcelStyleConfig
+{
+	Title = "Food Nutrient Information",
+	Subtitles = new string[]
+	{
+		"List of EDNP products",
+		"Audited by category"
+	},
+	TitleImage = new Picture()
+	{
+          FromBase64 = "iVBORw..." // string trucated for brevity of example
+	},
+	ShowGridLines = false,
+	BorderAround = true,
+	Border = true,
+	BorderColor = Color.CadetBlue,
+	HeaderBackgroundColor = Color.Yellow,
+	HeaderFontColor = Color.Black,
+	ExcludedColumnIndexes = new int[]
+	{
+		2, 5, 6
+	}
+};
+
+wb.AddSheet("Food Nutrients", shelfLifeData, style);
+wb.SaveAs(outputFileName);
+```
+![Title, subtitles, image, skipping three rows and cell stylings](https://i.imgur.com/pjoXQAb.png)
+
 # Documentation
 ## Available in the ExcelStyleConfig class
 ### Sheet configs
@@ -109,6 +141,7 @@ For the rest of the examples a style object has been provided
 <b>FreezePanes:</b> Enable to freeze the first row, defaults to <b>true</b><br />
 <b>PaddingColumns:</b> Gets or sets the number of columns to insert before column A, defaults to <b>0</b><br />
 <b>PaddingRows:</b> Gets or sets the number of rows to insert before row 1, defaults to <b>0</b><br />
+<b>ExcludedColumnIndexes:</b> Gets or sets which columns to exclude by index, range must be between 1 and the total number of columns, defaults to <b>new int[0]</b><br />
 
 ### Title configs
 <b>Title:</b> Gets or sets the title of the sheet, defaults to <b>null</b><br />
