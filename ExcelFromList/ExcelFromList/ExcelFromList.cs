@@ -70,6 +70,11 @@ namespace ExcelFromList
                             {
                                 var currentColIndex = i + 1;
                                 var colData = sheet.Columns[i];
+                                var colDisplayName = colData.Name;
+                                if (sheet.ExcelStyleConfig.UsePropDisplayName)
+                                {
+                                    colDisplayName = Utils.GetPropertyDisplayName(colData);
+                                }
                                 var rowsLength = sheet.Data.Count;
                                 var cellAddress = columnLetters[displayColCounter] + ctrlRowIndex;
                                 if (ExclusionColumnsAreValid(sheet.ExcelStyleConfig.ExcludedColumnIndexes, currentColIndex, numCols))
@@ -80,7 +85,7 @@ namespace ExcelFromList
                                         if (ctrlRowIndex == 2)
                                         {
                                             ExcelRange headerCell = ws.Cells[columnLetters[displayColCounter] + (ctrlRowIndex - 1)];
-                                            headerCell.Value = Utils.SplitCamelCase(colData.Name);
+                                            headerCell.Value = Utils.SplitCamelCase(colDisplayName);
                                             headerCell = FormatHeaderCell(headerCell, currentColIndex, numCols, sheet);
                                         }
                                     }
@@ -839,6 +844,10 @@ namespace ExcelFromList
         /// Gets or sets which columns to exclude by index, range must be between 1 and the total number of columns, defaults to new int[0]
         /// </summary>
         public int[] ExcludedColumnIndexes { get; set; } = new int[0];
+        /// <summary>
+        /// Enable to use the propery DisplayName attribute value, if available, for the column name, defaults to true
+        /// </summary>
+        public bool UsePropDisplayName { get; set; } = true;
 
         // Title configs
         /// <summary>

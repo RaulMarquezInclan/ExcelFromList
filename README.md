@@ -142,6 +142,7 @@ wb.SaveAs(outputFileName);
 <b>PaddingColumns:</b> Gets or sets the number of columns to insert before column A, defaults to <b>0</b><br />
 <b>PaddingRows:</b> Gets or sets the number of rows to insert before row 1, defaults to <b>0</b><br />
 <b>ExcludedColumnIndexes:</b> Gets or sets which columns to exclude by index, range must be between 1 and the total number of columns, defaults to <b>new int[0]</b><br />
+<b>UsePropDisplayName:</b> Enable to use the propery DisplayName attribute value, if available, for the column name, defaults to <b>true</b>
 
 ### Title configs
 <b>Title:</b> Gets or sets the title of the sheet, defaults to <b>null</b><br />

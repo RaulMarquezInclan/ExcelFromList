@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using ExcelFromList;
 using static ExcelFromList.ExcelStyleConfig;
@@ -8,6 +9,7 @@ namespace Testing
 {
     class ShelfLife
     {
+        [DisplayName("This is the product name")]
         public string Product { get; set; }
         public string ProductType { get; set; }
         public string ExtensionPeriod { get; set; }
@@ -197,7 +199,7 @@ namespace Testing
         static void Main(string[] args)
         {
 
-            //DefaultStyles();
+            DefaultStyles();
 
             //WithTitleAndSubtitles();
 
@@ -205,7 +207,7 @@ namespace Testing
 
             //WithTitleAndSubtitlesAndImageAndTwoSheets();
 
-            WithTitleAndSubtitlesAndSkippingThreeColumns();
+            //WithTitleAndSubtitlesAndSkippingThreeColumns();
 
         }
 

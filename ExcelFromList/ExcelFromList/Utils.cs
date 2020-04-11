@@ -1,8 +1,14 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -145,6 +151,12 @@ namespace ExcelFromList
         public static bool IsNullOrWhiteSpace(string value)
         {
             return string.IsNullOrEmpty(value) || value.Trim().Length == 0;
+        }
+
+        public static string GetPropertyDisplayName(PropertyInfo pi)
+        {
+            var dp = pi.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().SingleOrDefault();
+            return dp != null ? dp.DisplayName : pi.Name;
         }
 
     }
