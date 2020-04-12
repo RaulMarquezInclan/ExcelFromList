@@ -15,7 +15,7 @@ You can run these same examples in the <b>Testing</b> project.
 ![Default styles](https://i.imgur.com/MwOVdeQ.png)
 
 A style object has been provided for the rest of the examples
-## With title and subtitles
+## With title, subtitles, backdrop color and data background color
 ```
   var wb = new ExcelWorkBook();
   var style = new ExcelStyleConfig
@@ -26,7 +26,9 @@ A style object has been provided for the rest of the examples
 			"As of 2/1/06",
 			"Compiled by the Food Bank",
 			"From National Manufactures"
-		}
+		},
+		BackdropColor = Color.Lavender,
+		DataBackgroundColor = Color.LightGoldenrodYellow
   };
 
   wb.AddSheet("Shelf Life", shelfLifeData, style);
@@ -86,12 +88,12 @@ A style object has been provided for the rest of the examples
       {
 				FromUrl = @"http://www.images.com/titleImage.jpg"
       },
-      ShowGridLines = false,
-      BorderAround = true,
-      Border = true,
-      BorderColor = Color.CadetBlue,
-      HeaderBackgroundColor = Color.Yellow,
-      HeaderFontColor = Color.Black
+			ShowGridLines = false,
+			DataBorderAround = true,
+			DataBorder = true,
+			DataBorderColor = Color.CadetBlue,
+			HeaderBackgroundColor = Color.Yellow,
+			HeaderFontColor = Color.Black
   };
 
   wb.AddSheet("Shelf Life", shelfLifeData, sheetOneStyle);
@@ -116,9 +118,9 @@ var style = new ExcelStyleConfig
 		FromBase64 = "iVBORw..." // string trucated for brevity of example
 	},
 	ShowGridLines = false,
-	BorderAround = true,
-	Border = true,
-	BorderColor = Color.CadetBlue,
+	DataBorderAround = true,
+	DataBorder = true,
+	DataBorderColor = Color.CadetBlue,
 	HeaderBackgroundColor = Color.Yellow,
 	HeaderFontColor = Color.Black,
 	ExcludedColumnIndexes = new int[]
@@ -143,6 +145,7 @@ wb.SaveAs(outputFileName);
 <b>PaddingRows:</b> Gets or sets the number of rows to insert before row 1, defaults to <b>0</b><br />
 <b>ExcludedColumnIndexes:</b> Gets or sets which columns to exclude by index, range must be between 1 and the total number of columns, defaults to <b>new int[0]</b><br />
 <b>UsePropDisplayName:</b> Enable to use the propery DisplayName attribute value, if available, for the column name, defaults to <b>true</b>
+<b>BackdropColor:</b> Gets or set the backdrop color of the entire sheet, defaults to <b>null</b><br />
 
 ### Title configs
 <b>Title:</b> Gets or sets the title of the sheet, defaults to <b>null</b><br />

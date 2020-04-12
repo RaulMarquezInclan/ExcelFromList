@@ -47,7 +47,7 @@ namespace ExcelFromList
         {
             if (!(Sheets.Count > 0))
             {
-                throw new Exception("No sheets have been added. Add at least 1 sheet.");
+                throw new Exception("No sheets have been added. Add at least one sheet.");
             }
 
             try
@@ -58,6 +58,14 @@ namespace ExcelFromList
                     {
                         ExcelWorksheet ws = excelPackage.Workbook.Worksheets.Add(sheet.SheetName);
                         sheet.ExcelStyleConfig = sheet.ExcelStyleConfig ?? new ExcelStyleConfig();
+
+                        // Apply BackdropColor
+                        if (sheet.ExcelStyleConfig.BackdropColor != null)
+                        {
+                            ws.Cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            ws.Cells.Style.Fill.BackgroundColor.SetColor((Color)sheet.ExcelStyleConfig.BackdropColor);
+                        }
+
                         var ctrlRowIndex = 2;
                         var dataRowIndex = 1;
 
@@ -68,15 +76,20 @@ namespace ExcelFromList
                             var numCols = sheet.Columns.Count;
                             for (var i = 0; i < numCols; i++)
                             {
-                                var currentColIndex = i + 1;
                                 var colData = sheet.Columns[i];
+
+                                // Apply UsePropDisplayName
                                 var colDisplayName = colData.Name;
                                 if (sheet.ExcelStyleConfig.UsePropDisplayName)
                                 {
                                     colDisplayName = Utils.GetPropertyDisplayName(colData);
                                 }
+
+                                var currentColIndex = i + 1;
                                 var rowsLength = sheet.Data.Count;
                                 var cellAddress = columnLetters[displayColCounter] + ctrlRowIndex;
+
+                                // Apply ExcludedColumnIndexes and validate before rendering table
                                 if (ExclusionColumnsAreValid(sheet.ExcelStyleConfig.ExcludedColumnIndexes, currentColIndex, numCols))
                                 {
                                     // Header row
@@ -736,32 +749,32 @@ namespace ExcelFromList
                         }
                     }
 
-                    if (sheet.ExcelStyleConfig.BackgroundColor != null)
+                    if (sheet.ExcelStyleConfig.DataBackgroundColor != null)
                     {
                         dataCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        dataCell.Style.Fill.BackgroundColor.SetColor((Color)sheet.ExcelStyleConfig.BackgroundColor);
+                        dataCell.Style.Fill.BackgroundColor.SetColor((Color)sheet.ExcelStyleConfig.DataBackgroundColor);
                     }
 
-                    if (sheet.ExcelStyleConfig.FontColor != null)
+                    if (sheet.ExcelStyleConfig.DataFontColor != null)
                     {
-                        dataCell.Style.Font.Color.SetColor((Color)sheet.ExcelStyleConfig.FontColor);
+                        dataCell.Style.Font.Color.SetColor((Color)sheet.ExcelStyleConfig.DataFontColor);
                     }
                     #endregion
 
                     #region Borders
-                    if (sheet.ExcelStyleConfig.Border)
+                    if (sheet.ExcelStyleConfig.DataBorder)
                     {
-                        dataCell.Style.Border.BorderAround(sheet.ExcelStyleConfig.BorderStyle, sheet.ExcelStyleConfig.BorderColor);
+                        dataCell.Style.Border.BorderAround(sheet.ExcelStyleConfig.DataBorderStyle, sheet.ExcelStyleConfig.DataBorderColor);
                     }
 
-                    if (sheet.ExcelStyleConfig.BorderAround)
+                    if (sheet.ExcelStyleConfig.DataBorderAround)
                     {
                         if (!sheet.ExcelStyleConfig.ShowHeaders)
                         {
                             if (rowIndex == 1)
                             {
-                                dataCell.Style.Border.Top.Style = sheet.ExcelStyleConfig.BorderAroundStyle;
-                                dataCell.Style.Border.Top.Color.SetColor(sheet.ExcelStyleConfig.BorderAroundColor);
+                                dataCell.Style.Border.Top.Style = sheet.ExcelStyleConfig.DataBorderAroundStyle;
+                                dataCell.Style.Border.Top.Color.SetColor(sheet.ExcelStyleConfig.DataBorderAroundColor);
                             }
                         }
 
@@ -769,21 +782,21 @@ namespace ExcelFromList
                         {
                             if (colIndex == 1)
                             {
-                                dataCell.Style.Border.Left.Style = sheet.ExcelStyleConfig.BorderAroundStyle;
-                                dataCell.Style.Border.Left.Color.SetColor(sheet.ExcelStyleConfig.BorderAroundColor);
+                                dataCell.Style.Border.Left.Style = sheet.ExcelStyleConfig.DataBorderAroundStyle;
+                                dataCell.Style.Border.Left.Color.SetColor(sheet.ExcelStyleConfig.DataBorderAroundColor);
                             }
 
                             if (colIndex == colsLength)
                             {
-                                dataCell.Style.Border.Right.Style = sheet.ExcelStyleConfig.BorderAroundStyle;
-                                dataCell.Style.Border.Right.Color.SetColor(sheet.ExcelStyleConfig.BorderAroundColor);
+                                dataCell.Style.Border.Right.Style = sheet.ExcelStyleConfig.DataBorderAroundStyle;
+                                dataCell.Style.Border.Right.Color.SetColor(sheet.ExcelStyleConfig.DataBorderAroundColor);
                             }
                         }
 
                         if (rowIndex == rowsLength)
                         {
-                            dataCell.Style.Border.Bottom.Style = sheet.ExcelStyleConfig.BorderAroundStyle;
-                            dataCell.Style.Border.Bottom.Color.SetColor(sheet.ExcelStyleConfig.BorderAroundColor);
+                            dataCell.Style.Border.Bottom.Style = sheet.ExcelStyleConfig.DataBorderAroundStyle;
+                            dataCell.Style.Border.Bottom.Color.SetColor(sheet.ExcelStyleConfig.DataBorderAroundColor);
                         }
                     }
                     #endregion
@@ -848,6 +861,10 @@ namespace ExcelFromList
         /// Enable to use the propery DisplayName attribute value, if available, for the column name, defaults to true
         /// </summary>
         public bool UsePropDisplayName { get; set; } = true;
+        /// <summary>
+        /// Gets or set the backdrop color of the entire sheet, defaults to null
+        /// </summary>
+        public Color? BackdropColor { get; set; }
 
         // Title configs
         /// <summary>
@@ -885,35 +902,35 @@ namespace ExcelFromList
         /// <summary>
         /// Gets or sets data cell font color, defaults to null
         /// </summary>
-        public Color? FontColor { get; set; } = null;
+        public Color? DataFontColor { get; set; } = null;
         /// <summary>
         /// Gets or sets data cell background color, defaults to null
         /// </summary>
-        public Color? BackgroundColor { get; set; } = null;
+        public Color? DataBackgroundColor { get; set; } = null;
         /// <summary>
         /// Enable to draw a border around each data cell, defaults to false
         /// </summary>
-        public bool Border { get; set; } = false;
+        public bool DataBorder { get; set; } = false;
         /// <summary>
         /// Enable to draw a border around the data range, defaults to false
         /// </summary>
-        public bool BorderAround { get; set; } = false;
+        public bool DataBorderAround { get; set; } = false;
         /// <summary>
         /// Gets or sets the border color around each data cell, defaults to Color.Black
         /// </summary>
-        public Color BorderColor { get; set; } = Color.Black;
+        public Color DataBorderColor { get; set; } = Color.Black;
         /// <summary>
         /// Gets or sets the border color around the data range, defaults to Color.Black
         /// </summary>
-        public Color BorderAroundColor { get; set; } = Color.Black;
+        public Color DataBorderAroundColor { get; set; } = Color.Black;
         /// <summary>
         /// Gets or sets the border style around each data cell, defaults to ExcelBorderStyle.Thin
         /// </summary>
-        public ExcelBorderStyle BorderStyle { get; set; } = ExcelBorderStyle.Thin;
+        public ExcelBorderStyle DataBorderStyle { get; set; } = ExcelBorderStyle.Thin;
         /// <summary>
         /// Gets or sets the border style around the data range, defaults to ExcelBorderStyle.Thin
         /// </summary>
-        public ExcelBorderStyle BorderAroundStyle { get; set; } = ExcelBorderStyle.Thin;
+        public ExcelBorderStyle DataBorderAroundStyle { get; set; } = ExcelBorderStyle.Thin;
 
         // Header cell configs
         /// <summary>
