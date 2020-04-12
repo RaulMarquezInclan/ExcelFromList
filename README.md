@@ -34,7 +34,7 @@ A style object has been provided for the rest of the examples
   wb.AddSheet("Shelf Life", shelfLifeData, style);
   wb.SaveAs(outputFileName);
 ```
-![Title and subtitles](https://i.imgur.com/sBWGHrM.png)
+![Title and subtitles](https://i.imgur.com/perQgxC.png)
 
 ## With title, subtitles and image from Base64
 ```
