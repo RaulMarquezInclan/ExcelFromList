@@ -5,10 +5,15 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <id>ExcelFromList</id>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <title>ExcelFromList</title>
     <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine.</description>
-    <releaseNotes>Added UsePropDisplayName config to display the value in the property's DisplayName attribute if present</releaseNotes>
+    <releaseNotes>
+      Change to version 1.4.0, 
+      Added BackdropColor to color entire sheet, 
+      Added 'Data' prefix to all data cell configs, please adjust where needed, 
+      Updated examples and testing project
+    </releaseNotes>
     <authors>Raul Marquez</authors>
     <owners>Raul Marquez</owners>
     <copyright>Copyright 2020 Raul Marquez</copyright>
