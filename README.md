@@ -64,7 +64,7 @@ wb.SaveAs(outputFileName);
 var wb = new ExcelWorkBook();
 var sheetOneStyle = new ExcelStyleConfig
 {
-Title = "Product Shelf Life List",
+	Title = "Product Shelf Life List",
 	Subtitles = new string[]
 	{
 		"As of 2/1/06",
