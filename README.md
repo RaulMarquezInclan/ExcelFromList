@@ -8,28 +8,28 @@ You can run these same examples in the <b>Testing</b> project.
 
 ## With default styles (no style object provided)
 ```
-  var wb = new ExcelWorkBook();
-  wb.AddSheet("Shelf Life", shelfLifeData);
-  wb.SaveAs(outputFileName);
+var wb = new ExcelWorkBook();
+wb.AddSheet("Shelf Life", shelfLifeData);
+wb.SaveAs(outputFileName);
 ```
 ![Default styles](https://i.imgur.com/MwOVdeQ.png)
 
 A style object has been provided for the rest of the examples
 ## With title, subtitles, backdrop color and data background color
 ```
-  var wb = new ExcelWorkBook();
-  var style = new ExcelStyleConfig
-  {
-		Title = "Product Shelf Life List",
-		Subtitles = new string[]
-		{
-			"As of 2/1/06",
-			"Compiled by the Food Bank",
-			"From National Manufactures"
-		},
-		BackdropColor = Color.Lavender,
-		DataBackgroundColor = Color.LightGoldenrodYellow
-  };
+var wb = new ExcelWorkBook();
+var style = new ExcelStyleConfig
+{
+	Title = "Product Shelf Life List",
+	Subtitles = new string[]
+	{
+		"As of 2/1/06",
+		"Compiled by the Food Bank",
+		"From National Manufactures"
+	},
+	BackdropColor = Color.Lavender,
+	DataBackgroundColor = Color.LightGoldenrodYellow
+};
 
   wb.AddSheet("Shelf Life", shelfLifeData, style);
   wb.SaveAs(outputFileName);
@@ -38,67 +38,67 @@ A style object has been provided for the rest of the examples
 
 ## With title, subtitles and image from Base64
 ```
-  var wb = new ExcelWorkBook();
-  var style = new ExcelStyleConfig
-  {
-		Title = "Product Shelf Life List",
-		Subtitles = new string[]
-		{
-			"As of 2/1/06",
-			"Compiled by the Food Bank",
-			"From National Manufactures"
-		},
-		TitleImage = new Picture()
-		{
-			FromBase64 = "iVBORw..." // string trucated for brevity of example
-		}
-  };
+var wb = new ExcelWorkBook();
+var style = new ExcelStyleConfig
+{
+	Title = "Product Shelf Life List",
+	Subtitles = new string[]
+	{
+		"As of 2/1/06",
+		"Compiled by the Food Bank",
+		"From National Manufactures"
+	},
+	TitleImage = new Picture()
+	{
+		FromBase64 = "iVBORw..." // string trucated for brevity of example
+	}
+};
 
-  wb.AddSheet("Shelf Life", shelfLifeData, style);
-  wb.SaveAs(outputFileName);
+wb.AddSheet("Shelf Life", shelfLifeData, style);
+wb.SaveAs(outputFileName);
 ```
 ![Title, subtitles and image](https://i.imgur.com/vEJp6Yx.png)
 
 ## With title, subtitles, image from file (sheetOneStyle) and url (sheetTwoStyle), two sheets and cell stylings
 ```
-  var wb = new ExcelWorkBook();
-  var sheetOneStyle = new ExcelStyleConfig
-  {
-      Title = "Product Shelf Life List",
-      Subtitles = new string[]
-      {
-				"As of 2/1/06",
-				"Compiled by the Food Bank",
-				"From National Manufactures"
-      },
-      TitleImage = new Picture()
-      {
-				FromFile = @"x:\titleImage.jpg"
-      }
-  };
-  var sheetTwoStyle = new ExcelStyleConfig
-  {
-      Title = "Food Nutrient Information",
-      Subtitles = new string[]
-      {
-				"List of EDNP products",
-				"Audited by category"
-      },
-      TitleImage = new Picture()
-      {
-				FromUrl = @"http://www.images.com/titleImage.jpg"
-      },
-			ShowGridLines = false,
-			DataBorderAround = true,
-			DataBorder = true,
-			DataBorderColor = Color.CadetBlue,
-			HeaderBackgroundColor = Color.Yellow,
-			HeaderFontColor = Color.Black
-  };
+var wb = new ExcelWorkBook();
+var sheetOneStyle = new ExcelStyleConfig
+{
+Title = "Product Shelf Life List",
+	Subtitles = new string[]
+	{
+		"As of 2/1/06",
+		"Compiled by the Food Bank",
+		"From National Manufactures"
+	},
+	TitleImage = new Picture()
+	{
+		FromFile = @"x:\titleImage.jpg"
+	}
+};
+var sheetTwoStyle = new ExcelStyleConfig
+{
+	Title = "Food Nutrient Information",
+	Subtitles = new string[]
+	{
+		"List of EDNP products",
+		"Audited by category"
+	},
+	TitleImage = new Picture()
+	{
+		FromUrl = @"http://www.images.com/titleImage.jpg"
+	},
+	ShowGridLines = false,
+	DataBorderAround = true,
+	DataBorder = true,
+	DataBorderColor = Color.CadetBlue,
+	HeaderBackgroundColor = Color.Yellow,
+	HeaderFontColor = Color.Black
+};
 
-  wb.AddSheet("Shelf Life", shelfLifeData, sheetOneStyle);
-  wb.AddSheet("Food Nutrients", foodInfoData, sheetTwoStyle);
-  wb.SaveAs(outputFileName);
+wb.AddSheet("Shelf Life", shelfLifeData, sheetOneStyle);
+wb.AddSheet("Food Nutrients", foodInfoData, sheetTwoStyle);
+wb.SaveAs(outputFileName);
 ```
 ![Title, subtitles, image and two sheets](https://i.imgur.com/LpDg2pb.png)
 
