@@ -1,5 +1,5 @@
 # ExcelFromList
-Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. This uses the EPPlus engine, you can check them out at: <br />
+Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine, you can check them out at: <br />
 https://github.com/EPPlusSoftware/EPPlus
 
 In the below examples <b>outputFileName</b> is a string identifying a full path file name and <b>shelfLifeData</b> is a list of <b>ShelfLife</b> type objects.
