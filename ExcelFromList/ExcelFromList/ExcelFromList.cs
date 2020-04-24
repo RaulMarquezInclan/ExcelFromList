@@ -351,8 +351,7 @@ namespace ExcelFromList
                 if (!(Utils.IsNullOrWhiteSpace(FullFileName)))
                 {
                     if (File.Exists(FullFileName))
-                        //Process.Start(new ProcessStartInfo(FullFileName) { UseShellExecute = true });
-                        Process.Start(FullFileName);
+                        Process.Start(new ProcessStartInfo(FullFileName) { UseShellExecute = true });
                     else
                         throw new FileNotFoundException("Unable to open file.", FullFileName);
                 }
