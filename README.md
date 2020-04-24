@@ -31,8 +31,8 @@ var style = new ExcelStyleConfig
 	DataBackgroundColor = Color.LightGoldenrodYellow
 };
 
-  wb.AddSheet("Shelf Life", shelfLifeData, style);
-  wb.SaveAs(outputFileName);
+wb.AddSheet("Shelf Life", shelfLifeData, style);
+wb.SaveAs(outputFileName);
 ```
 ![Title and subtitles](https://i.imgur.com/perQgxC.png)
 
