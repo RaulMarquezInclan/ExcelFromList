@@ -5,14 +5,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
     <id>ExcelFromList</id>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
     <title>ExcelFromList</title>
     <description>Straightforward and easy way to create stylized excel workbooks from lists. Add an image, title, subtitles and overal cell styles/formats. Uses the EPPlus engine.</description>
     <releaseNotes>
-      Change to version 1.4.0, 
-      Added BackdropColor to color entire sheet, 
-      Added 'Data' prefix to all data cell configs, please adjust where needed, 
-      Updated examples and testing project
+      Change to version 1.5.0,
+      Fixed the 'The specified executable is not a valid application for this OS platform.' error when executing the Open() method from a .NET Core project
+      Made FullFileName property public so it can be set manually
+      Added Save() method, will save the Excel only if FullFileName property has been set, SaveAs(fullFileName) will still work
     </releaseNotes>
     <authors>Raul Marquez</authors>
     <owners>Raul Marquez</owners>

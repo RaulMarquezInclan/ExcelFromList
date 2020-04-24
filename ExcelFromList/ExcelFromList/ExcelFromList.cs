@@ -21,7 +21,7 @@ namespace ExcelFromList
         private List<Sheet> Sheets = new List<Sheet>();
         private bool FirstRow { get; set; } = true;
         private byte[] bytesArray { get; set; } = null;
-        private string fullFileName { get; set; } = null;
+        public string FullFileName { get; set; } = null;
 
         private class Sheet
         {
@@ -288,30 +288,57 @@ namespace ExcelFromList
         }
 
         /// <summary>
-        /// Saves the workbook to an Excel file
+        /// Saves the workbook to an Excel file with the provided full file name
         /// </summary>
         public void SaveAs(string _fullFileName)
         {
-            fullFileName = _fullFileName;
+            FullFileName = _fullFileName;
             try
             {
-                if (File.Exists(fullFileName))
-                {
-                    File.Delete(fullFileName);
-                    Utils.WaitForFileReady(fullFileName);
-                }
-
-                bytesArray = GetBytesArray();
-                using (var file = File.OpenWrite(fullFileName))
-                {
-                    file.Write(bytesArray, 0, bytesArray.Length);
-                }
-                Utils.WaitForFileReady(fullFileName);
+                SaveFile();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        /// <summary>
+        /// Saves the workbook to an Excel (FullFileName property must be set)
+        /// </summary>
+        public void Save()
+        {
+            try
+            {
+                if (FullFileName != null)
+                {
+                    SaveFile();
+                }
+                else
+                {
+                    throw new Exception("FullFileName property hasn't been set, the Save() method cannot be used, alternatively you can use SaveAs(FullFileName).");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void SaveFile()
+        {
+            if (File.Exists(FullFileName))
+            {
+                File.Delete(FullFileName);
+                Utils.WaitForFileReady(FullFileName);
+            }
+
+            bytesArray = GetBytesArray();
+            using (var file = File.OpenWrite(FullFileName))
+            {
+                file.Write(bytesArray, 0, bytesArray.Length);
+            }
+            Utils.WaitForFileReady(FullFileName);
         }
 
         /// <summary>
@@ -321,12 +348,13 @@ namespace ExcelFromList
         {
             try
             {
-                if (!(Utils.IsNullOrWhiteSpace(fullFileName)))
+                if (!(Utils.IsNullOrWhiteSpace(FullFileName)))
                 {
-                    if (File.Exists(fullFileName))
-                        Process.Start(fullFileName);
+                    if (File.Exists(FullFileName))
+                        //Process.Start(new ProcessStartInfo(FullFileName) { UseShellExecute = true });
+                        Process.Start(FullFileName);
                     else
-                        throw new FileNotFoundException("Unable to open file.", fullFileName);
+                        throw new FileNotFoundException("Unable to open file.", FullFileName);
                 }
                 else
                 {

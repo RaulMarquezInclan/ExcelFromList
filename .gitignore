@@ -14,3 +14,5 @@
 *.nuspec
 /ExcelFromList/ExcelFromList/bin/Debug
 /ExcelFromList/ExcelFromList/Properties
+/ExcelFromList/.vs/ExcelFromList/v16/.suo
+/ExcelFromList/Testing/images/MCSD%2BApp%2BBuilder-01.png
