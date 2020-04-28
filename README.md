@@ -135,7 +135,7 @@ wb.SaveAs(outputFileName);
 ![Title, subtitles, image, skipping three rows and cell stylings](https://i.imgur.com/BFid7jk.png)
 
 # Documentation
-## Available in the ExcelStyleConfig class
+## ExcelStyleConfig class
 ### Sheet configs
 <b>ShowHeaders:</b> Enable to show headers (taken from the property name), defaults to <b>true</b><br />
 <b>ShowGridLines:</b> Enable to show grid lines, defaults to <b>true</b><br />
@@ -184,8 +184,8 @@ wb.SaveAs(outputFileName);
 <b>HeaderBorderStyle:</b> Gets or sets the border style around each header cell, defaults to <b>ExcelBorderStyle.Thin</b><br />
 <b>HeaderBorderAroundStyle:</b> Gets or sets the border style around the header range, defaults to <b>ExcelBorderStyle.Thin</b><br />
 
-## Available in the ExcelWorkBook class
-### Methods
+## ExcelWorkBook class
+<b>FullFileName:</b> Gets or sets the full file path for the generated Excel file
 <b>GetBytesArray():</b> Returns the ExcelWorkBook bytes array<br />
 <b>AddSheet(string sheetName):</b> Adds a sheet to the worksheet, will apply style config if provided<br />
 <b>RemoveSheet(string sheetName):</b> Removes a sheet from the worksheet<br />
