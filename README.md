@@ -191,6 +191,7 @@ wb.SaveAs(outputFileName);
 <b>RemoveSheet(string sheetName):</b> Removes a sheet from the worksheet<br />
 <b>ClearWorkSheet():</b> Removes all sheets from worksheet<br />
 <b>SheetExists(string sheetName):</b> Checks if a specific sheet exists<br />
+<b>Save():</b> Saves the workbook to an Excel (FullFileName property must be set)<br />
 <b>SaveAs():</b> Saves the workbook to an Excel file<br />
 <b>Open():</b> Opens saved Excel file with OS default program<br />
 
