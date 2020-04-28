@@ -185,7 +185,7 @@ wb.SaveAs(outputFileName);
 <b>HeaderBorderAroundStyle:</b> Gets or sets the border style around the header range, defaults to <b>ExcelBorderStyle.Thin</b><br />
 
 ## ExcelWorkBook class
-<b>FullFileName:</b> Gets or sets the full file path for the generated Excel file
+<b>FullFileName:</b> Gets or sets the full file path for the generated Excel file<br />
 <b>GetBytesArray():</b> Returns the ExcelWorkBook bytes array<br />
 <b>AddSheet(string sheetName):</b> Adds a sheet to the worksheet, will apply style config if provided<br />
 <b>RemoveSheet(string sheetName):</b> Removes a sheet from the worksheet<br />
