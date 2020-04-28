@@ -165,14 +165,14 @@ wb.SaveAs(outputFileName);
 <i>* Uses Excel type data formatting</i><br />
 
 ### Data cell configs
-<b>FontColor:</b> Gets or sets data cell font color, defaults to <b>null</b><br />
-<b>BackgroundColor:</b> Gets or sets data cell background color, defaults to <b>null</b><br />
-<b>Border:</b> Enable to draw a border around each data cell, defaults to <b>false</b><br />
-<b>BorderAround:</b> Enable to draw a border around the data range, defaults to <b></b>false<br />
-<b>BorderColor:</b> Gets or sets the border color around each data cell, defaults to <b>Color.Black</b><br />
-<b>BorderAroundColor:</b> Gets or sets the border color around the data range, defaults to <b>Color.Black</b><br />
-<b>BorderStyle:</b> Gets or sets the border style around each data cell, defaults to <b>ExcelBorderStyle.Thin</b><br />
-<b>BorderAroundStyle:</b> Gets or sets the border style around the data range, defaults to <b>ExcelBorderStyle.Thin</b><br />
+<b>DataFontColor:</b> Gets or sets data cell font color, defaults to <b>null</b><br />
+<b>DataBackgroundColor:</b> Gets or sets data cell background color, defaults to <b>null</b><br />
+<b>DataBorder:</b> Enable to draw a border around each data cell, defaults to <b>false</b><br />
+<b>DataBorderAround:</b> Enable to draw a border around the data range, defaults to <b></b>false<br />
+<b>DataBorderColor:</b> Gets or sets the border color around each data cell, defaults to <b>Color.Black</b><br />
+<b>DataBorderAroundColor:</b> Gets or sets the border color around the data range, defaults to <b>Color.Black</b><br />
+<b>DataBorderStyle:</b> Gets or sets the border style around each data cell, defaults to <b>ExcelBorderStyle.Thin</b><br />
+<b>DataBorderAroundStyle:</b> Gets or sets the border style around the data range, defaults to <b>ExcelBorderStyle.Thin</b><br />
 
 ### Header cell configs
 <b>HeaderFontColor:</b> Gets or sets the header font color, defaults to <b>Color.LightGray</b><br />
