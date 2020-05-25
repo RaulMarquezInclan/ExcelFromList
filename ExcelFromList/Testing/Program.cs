@@ -194,7 +194,7 @@ namespace Testing
                 FOPDigLabeled = "18 (24)"
             }
         };
-        static string outputFileName = "C:\\OutputFile.xlsx";
+        static string outputFileName = @"C:\Temp\OutputFile.xlsx";
 
         static void Main(string[] args)
         {
