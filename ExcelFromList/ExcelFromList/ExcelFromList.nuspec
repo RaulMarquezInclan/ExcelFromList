@@ -20,7 +20,7 @@
     <tags>excel list listtoexcel</tags>
 
     <dependencies>
-      <dependency id="EPPlus" version="5.1.0" />
+      <dependency id="EPPlus" version="4.5.3.3" />
     </dependencies>
   </metadata>
 
